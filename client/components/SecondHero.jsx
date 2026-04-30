@@ -12,9 +12,9 @@ export default function CollegeDataPlatform() {
           </h1>
           <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
             We simplify information for you on over{" "}
-            <span className="font-semibold text-gray-800">40,250 Colleges</span>
+            <span className="font-semibold text-gray-800">40,250 Colleges </span> <span>and </span>
             <span className="font-semibold text-gray-800">
-              3,51,875 Courses
+               3,51,875 Courses
             </span>{" "}
             across domains and regions all over India
           </p>
