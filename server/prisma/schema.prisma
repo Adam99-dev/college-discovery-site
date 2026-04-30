@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  savedColleges SavedCollege[]
+
+  @@index([email])
+}
+
+model College {
+  id                  Int            @id @default(autoincrement())
+  name                String
+  location            String
+  fees                Int
+  rating              Float
+  placementPercentage Int
+  description         String
+  savedBy             SavedCollege[]
+
+  @@index([name])
+  @@index([location])
+  @@index([fees])
+  @@index([placementPercentage])
+  @@index([rating(sort: Desc)])
+  @@index([location, fees])
+  @@index([rating, fees])
+  @@index([name, location])
+  @@index([location, rating])
+}
+
+model SavedCollege {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  collegeId Int
+  college   College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@index([userId])
+  @@index([collegeId])
+}
