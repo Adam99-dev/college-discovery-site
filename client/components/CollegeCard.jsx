@@ -34,8 +34,8 @@ const CollegeCard = ({
 
     try {
       const url = isSaved
-        ? "http://localhost:3000/api/saved_colleges/remove"
-        : "http://localhost:3000/api/saved_colleges";
+        ? import.meta.env.BACKEND_URL + "/api/saved_colleges/remove"
+        : import.meta.env.BACKEND_URL + "/api/saved_colleges";
 
       const response = await fetch(url, {
         method: isSaved ? "DELETE" : "POST",

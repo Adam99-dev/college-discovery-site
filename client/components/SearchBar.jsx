@@ -42,7 +42,7 @@ const SearchBar = ({
 
       try {
         const response = await fetch(
-          `http://localhost:3000/api/colleges?search=${query}&limit=5`,
+          import.meta.env.BACKEND_URL + `/api/colleges?search=${query}&limit=5`,
           { credentials: "include" },
         );
         const data = await response.json();

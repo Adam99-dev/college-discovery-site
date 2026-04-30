@@ -60,7 +60,7 @@ const CollegeDetails = () => {
 
         // SINGLE COLLEGE
         const response = await fetch(
-          `http://localhost:3000/api/colleges/${collegeId}`,
+          import.meta.env.BACKEND_URL + `/api/colleges/${collegeId}`,
           {
             credentials: "include",
           }
@@ -76,7 +76,7 @@ const CollegeDetails = () => {
 
         // RECOMMENDED COLLEGES
         const recommendedResponse = await fetch(
-          "http://localhost:3000/api/colleges?page=1&limit=3",
+          import.meta.env.BACKEND_URL + "/api/colleges?page=1&limit=3",
           {
             credentials: "include",
           }
