@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   // Check if user is authenticated
   const checkAuth = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/user/me", {
+      const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/me", {
         method: "GET",
         credentials: "include",        // Important for cookies
       });
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   // Logout User
   const logoutUser = async () => {
     try {
-      await fetch("http://localhost:3000/api/user/logout", {
+      await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/logout", {
         method: "POST",
         credentials: "include",
       });

@@ -23,7 +23,7 @@ const SavedCollege = () => {
         setError(null);
 
         const response = await fetch(
-          import.meta.env.BACKEND_URL + `/api/saved_colleges/${user.id}`,
+          import.meta.env.VITE_BACKEND_URL + `/api/saved_colleges/${user.id}`,
           {
             method: "GET",
 

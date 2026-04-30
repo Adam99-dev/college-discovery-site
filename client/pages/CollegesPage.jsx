@@ -53,7 +53,7 @@ const CollegesPage = () => {
     const fetchSavedColleges = async () => {
       try {
         const response = await fetch(
-          import.meta.env.BACKEND_URL + `/api/saved_colleges/${user.id}`,
+          import.meta.env.VITE_BACKEND_URL + `/api/saved_colleges/${user.id}`,
           {
             credentials: "include",
           },
@@ -109,7 +109,7 @@ const CollegesPage = () => {
         if (minRating) query.append("minRating", minRating);
 
         const response = await fetch(
-          import.meta.env.BACKEND_URL + `/api/colleges?${query.toString()}`,
+          import.meta.env.VITE_BACKEND_URL + `/api/colleges?${query.toString()}`,
           {
             method: "GET",
 
