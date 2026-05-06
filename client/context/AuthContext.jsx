@@ -5,28 +5,23 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(null);        // Added for easy access
 
-  // Check if user is authenticated
+  // 🔥 Check auth from backend
   const checkAuth = async () => {
     try {
-      const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/me", {
-        method: "GET",
-        credentials: "include",        // Important for cookies
-      });
+      const res = await fetch(
+        import.meta.env.VITE_BACKEND_URL + "/api/user/me",
+        {
+          credentials: "include",
+        }
+      );
 
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user || data);    // Handle both {user: {...}} and direct user object
-        // If your backend also returns token in /me, you can set it here too
-      } else {
-        setUser(null);
-        setToken(null);
-      }
-    } catch (error) {
-      console.error("Auth check failed:", error);
+      if (!res.ok) throw new Error();
+
+      const data = await res.json();
+      setUser(data.user || data);
+    } catch {
       setUser(null);
-      setToken(null);
     } finally {
       setLoading(false);
     }
@@ -36,59 +31,52 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  // Login User
-  const loginUser = (userData, authToken = null) => {
-    setUser(userData);
-    if (authToken) {
-      setToken(authToken);
-      // Optional: store token in localStorage as backup
-      localStorage.setItem("token", authToken);
-    }
+  // 🔥 FIX 1: instant UI update
+  const loginUser = (userData) => {
+    setUser(userData);        // immediate update
   };
 
-  // Logout User
+  // 🔥 FIX 2: optional re-sync (background)
+  const loginAndSync = async (userData) => {
+    setUser(userData);        // instant UI
+    await checkAuth();        // sync with backend (optional)
+  };
+
   const logoutUser = async () => {
     try {
-      await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (error) {
-      console.error("Logout error:", error);
+      await fetch(
+        import.meta.env.VITE_BACKEND_URL + "/api/user/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+    } catch (e) {
+      console.error(e);
     } finally {
       setUser(null);
-      setToken(null);
-      localStorage.removeItem("token");
     }
-  };
-
-  // Refresh auth (useful after login)
-  const refreshAuth = () => {
-    checkAuth();
-  };
-
-  const value = {
-    user,
-    token,           // ← Now easily accessible
-    loading,
-    isAuthenticated: !!user,
-    loginUser,
-    logoutUser,
-    setUser,
-    refreshAuth,
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: !!user,
+        loginUser,
+        loginAndSync,   // 🔥 new
+        logoutUser,
+        refreshAuth: checkAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
 };

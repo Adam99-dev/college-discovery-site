@@ -5,13 +5,27 @@ import prisma from "../config/db.js";
 // ======================
 export const registerCollege = async (req, res) => {
   try {
-    const { name, location, fees, rating, placementPercentage, description } = req.body;
+    const {
+      name,
+      location,
+      fees,
+      rating,
+      ranking,
+      placementPercentage,
+      averagePackage,
+      highestPackage,
+      totalStudents,
+      facultyCount,
+      establishedYear,
+      campusArea,
+      description,
+      exams,
+    } = req.body;
 
-    // Basic validation
     if (!name || !location || !fees) {
       return res.status(400).json({
         success: false,
-        message: "Name, location and fees are required fields",
+        message: "Name, location and fees are required",
       });
     }
 
@@ -20,9 +34,22 @@ export const registerCollege = async (req, res) => {
         name: name.trim(),
         location: location.trim(),
         fees: Number(fees),
-        rating: Number(rating) || 0,
-        placementPercentage: Number(placementPercentage) || 0,
+
+        rating: rating ? Number(rating) : null,
+        ranking: ranking ? Number(ranking) : null,
+        placementPercentage: placementPercentage
+          ? Number(placementPercentage)
+          : null,
+
+        averagePackage: averagePackage ? Number(averagePackage) : null,
+        highestPackage: highestPackage ? Number(highestPackage) : null,
+        totalStudents: totalStudents ? Number(totalStudents) : null,
+        facultyCount: facultyCount ? Number(facultyCount) : null,
+        establishedYear: establishedYear ? Number(establishedYear) : null,
+        campusArea: campusArea ? Number(campusArea) : null,
+
         description: description?.trim() || null,
+        exams: exams || [],
       },
     });
 
@@ -40,103 +67,96 @@ export const registerCollege = async (req, res) => {
   }
 };
 
-// ======================
-// 2. Get All Colleges with Filters + Pagination + Search
-// ======================
 export const getAllColleges = async (req, res) => {
   try {
     const {
       search = "",
-      location = "",
+      city = "",
+      state = "",
       minFees,
       maxFees,
       minRating,
+      minPackage,
+      sortBy = "rating",
+      order = "desc",
       page = 1,
       limit = 12,
     } = req.query;
 
     const pageNumber = Math.max(1, Number(page));
-    const take = Math.min(50, Math.max(1, Number(limit))); // limit between 1-50
+    const take = Math.min(50, Math.max(1, Number(limit)));
     const skip = (pageNumber - 1) * take;
 
-    const whereClause = {
-      AND: [
-        // Search by name (case insensitive)
-        search
-          ? {
-              name: {
-                contains: search.trim(),
-                mode: "insensitive",
-              },
-            }
-          : {},
+    const where = {};
 
-        // Filter by location
-        location
-          ? {
-              location: {
-                contains: location.trim(),
-                mode: "insensitive",
-              },
-            }
-          : {},
+    // 🔑 Main Search Logic
+    if (search?.trim()) {
+      const searchTerm = search.trim();
+      where.OR = [
+        { name: { contains: searchTerm, mode: "insensitive" } },
+        { city: { contains: searchTerm, mode: "insensitive" } },
+        { state: { contains: searchTerm, mode: "insensitive" } },
+      ];
+    }
 
-        // Fees range filter
-        minFees || maxFees
-          ? {
-              fees: {
-                ...(minFees && { gte: Number(minFees) }),
-                ...(maxFees && { lte: Number(maxFees) }),
-              },
-            }
-          : {},
+    // Additional filters (if any)
+    if (city?.trim()) {
+      where.city = { contains: city.trim(), mode: "insensitive" };
+    }
+    if (state?.trim()) {
+      where.state = { contains: state.trim(), mode: "insensitive" };
+    }
+    if (minRating) {
+      where.rating = { gte: Number(minRating) };
+    }
+    if (minPackage) {
+      where.averagePackage = { gte: Number(minPackage) };
+    }
 
-        // Rating filter (optional improvement)
-        minRating
-          ? {
-              rating: {
-                gte: Number(minRating),
-              },
-            }
-          : {},
-      ].filter(Boolean), // Remove empty objects
+    // Fees range filter
+    if (minFees || maxFees) {
+      where.AND = [
+        minFees && { feesMax: { gte: Number(minFees) } },
+        maxFees && { feesMin: { lte: Number(maxFees) } },
+      ].filter(Boolean);
+    }
+
+    const orderBy = {
+      [sortBy]: order.toLowerCase() === "asc" ? "asc" : "desc",
     };
 
-    // If AND array is empty, remove it
-    const finalWhere = whereClause.AND.length > 0 ? whereClause : {};
-
-    const [colleges, totalColleges] = await Promise.all([
+    const [colleges, total] = await Promise.all([
       prisma.college.findMany({
-        where: finalWhere,
+        where: Object.keys(where).length > 0 ? where : {},
         select: {
           id: true,
           name: true,
-          location: true,
-          fees: true,
+          slug: true,
+          city: true,
+          state: true,
+          feesMin: true,
+          feesMax: true,
           rating: true,
           placementPercentage: true,
+          averagePackage: true,
+          highestPackage: true,
+          totalStudents: true,
+          campusArea: true,
+          image: true,
         },
-        orderBy: [
-          { rating: "desc" },
-          { placementPercentage: "desc" },
-        ],
+        orderBy,
         skip,
         take,
       }),
 
-      prisma.college.count({
-        where: finalWhere,
-      }),
+      prisma.college.count({ where: Object.keys(where).length > 0 ? where : {} }),
     ]);
-
-    const totalPages = Math.ceil(totalColleges / take);
 
     res.status(200).json({
       success: true,
       currentPage: pageNumber,
-      totalPages,
-      totalColleges,
-      limit: take,
+      totalPages: Math.ceil(total / take),
+      totalColleges: total,
       colleges,
     });
   } catch (error) {
@@ -148,30 +168,21 @@ export const getAllColleges = async (req, res) => {
   }
 };
 
-// ======================
-// 3. Get Single College by ID
-// ======================
 export const getSingleCollege = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (!id || isNaN(Number(id))) {
-      return res.status(400).json({
-        success: false,
-        message: "Valid college ID is required",
-      });
-    }
+    const { slug } = req.params;
 
     const college = await prisma.college.findUnique({
-      where: { id: Number(id) },
-      select: {
-        id: true,
-        name: true,
-        location: true,
-        fees: true,
-        rating: true,
-        placementPercentage: true,
-        description: true,
+      where: { slug },
+      include: {
+        courses: true,
+        reviews: {
+          include: {
+            user: {
+              select: { id: true, name: true },
+            },
+          },
+        },
       },
     });
 

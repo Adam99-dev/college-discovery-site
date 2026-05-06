@@ -2,28 +2,12 @@ import prisma from "../config/db.js";
 
 export const saveCollege = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
     const { collegeId } = req.body;
-
-    const alreadySaved = await prisma.savedCollege.findUnique({
-      where: {
-        userId_collegeId: {
-          userId: Number(userId),
-          collegeId: Number(collegeId),
-        },
-      },
-    });
-
-    if (alreadySaved) {
-      return res.status(400).json({
-        success: false,
-        message: "College already saved",
-      });
-    }
 
     const savedCollege = await prisma.savedCollege.create({
       data: {
-        userId: Number(userId),
+        userId,
         collegeId: Number(collegeId),
       },
     });
@@ -33,7 +17,15 @@ export const saveCollege = async (req, res) => {
       savedCollege,
     });
   } catch (error) {
-    console.log(error);
+    // unique constraint handle
+    if (error.code === "P2002") {
+      return res.status(400).json({
+        success: false,
+        message: "College already saved",
+      });
+    }
+
+    console.error(error);
 
     res.status(500).json({
       success: false,
@@ -44,26 +36,32 @@ export const saveCollege = async (req, res) => {
 
 export const getSavedColleges = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
 
     const savedColleges = await prisma.savedCollege.findMany({
-      where: {
-        userId: Number(userId),
-      },
-
+      where: { userId },
       select: {
         id: true,
-
         college: {
           select: {
             id: true,
             name: true,
-            location: true,
-            fees: true,
+            slug: true,
+            city: true,
+            state: true,
+            feesMin: true,
+            feesMax: true,
             rating: true,
             placementPercentage: true,
+            averagePackage: true,
+            highestPackage: true,
+            campusArea: true,
+            image: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
@@ -73,7 +71,7 @@ export const getSavedColleges = async (req, res) => {
       savedColleges,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     res.status(500).json({
       success: false,
@@ -84,13 +82,13 @@ export const getSavedColleges = async (req, res) => {
 
 export const removeSavedCollege = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
     const { collegeId } = req.body;
 
     await prisma.savedCollege.delete({
       where: {
         userId_collegeId: {
-          userId: Number(userId),
+          userId,
           collegeId: Number(collegeId),
         },
       },
@@ -101,7 +99,14 @@ export const removeSavedCollege = async (req, res) => {
       message: "College removed from saved",
     });
   } catch (error) {
-    console.log(error);
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        success: false,
+        message: "Saved college not found",
+      });
+    }
+
+    console.error(error);
 
     res.status(500).json({
       success: false,

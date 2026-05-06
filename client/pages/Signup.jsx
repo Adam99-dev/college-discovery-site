@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,14 +28,17 @@ const Signup = () => {
     try {
       setLoading(true);
 
-      const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        import.meta.env.VITE_BACKEND_URL + "/api/user/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
         },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      );
 
       const data = await response.json();
 
@@ -41,9 +46,9 @@ const Signup = () => {
         throw new Error(data.message || "Signup failed");
       }
 
-      localStorage.setItem("token", data.token);
       toast.success(data.message);
 
+      loginUser(data.user);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -56,7 +61,6 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50 flex items-center justify-center p-4">
       <div className="max-w-5xl w-full bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row relative">
-        
         {/* Close Button - Top Right */}
         <button
           onClick={() => navigate("/")}
@@ -161,7 +165,10 @@ const Signup = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none"
               >
                 {showPassword ? (
-                  <EyeOff className="text-orange-500 cursor-pointer" size={20} />
+                  <EyeOff
+                    className="text-orange-500 cursor-pointer"
+                    size={20}
+                  />
                 ) : (
                   <Eye className="text-orange-500 cursor-pointer" size={20} />
                 )}

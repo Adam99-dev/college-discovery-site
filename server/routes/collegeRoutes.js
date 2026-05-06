@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.post("/register", registerCollege);
 router.get("/", getAllColleges);
-router.get("/:id", getSingleCollege);
+router.get("/:slug", getSingleCollege);
 
 export default router;

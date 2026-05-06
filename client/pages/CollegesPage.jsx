@@ -1,243 +1,150 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 import CollegeCard from "../components/CollegeCard.jsx";
 import SearchBar from "../components/SearchBar.jsx";
-import { useAuth } from "../context/AuthContext.jsx";
+import CollegePageSkeleton from "../skeletons/CollegePage.s.jsx";
+import { School, Frown, RotateCcw } from "lucide-react";
+import CompareBar from "../components/CompareBar.jsx";
 
 const CollegesPage = () => {
-  const { loading: authLoading, logoutUser, isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
 
   // MAIN STATES
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedColleges, setSelectedColleges] = useState([]);
-  const [showCompareBar, setShowCompareBar] = useState(false);
   const [error, setError] = useState(null);
+  const [totalColleges, setTotalColleges] = useState(0);
 
   // SAVED COLLEGES
   const [savedColleges, setSavedColleges] = useState(new Set());
 
   // PAGINATION
   const [page, setPage] = useState(1);
-
   const [totalPages, setTotalPages] = useState(1);
 
   // FILTER STATES
   const [search, setSearch] = useState("");
-
   const [location, setLocation] = useState("");
-
   const [minFees, setMinFees] = useState("");
-
   const [maxFees, setMaxFees] = useState("");
-
   const [minRating, setMinRating] = useState("");
 
-  // DEBOUNCED FEES
-  const [debouncedMinFees, setDebouncedMinFees] = useState("");
+  // APPLIED FILTERS (used for actual fetching)
+  const [appliedSearch, setAppliedSearch] = useState("");
+  const [appliedLocation, setAppliedLocation] = useState("");
+  const [appliedMinFees, setAppliedMinFees] = useState("");
+  const [appliedMaxFees, setAppliedMaxFees] = useState("");
+  const [appliedMinRating, setAppliedMinRating] = useState("");
 
-  const [debouncedMaxFees, setDebouncedMaxFees] = useState("");
+  // APPLY FILTERS
+  const handleApplyFilters = () => {
+    setPage(1);
+    setAppliedSearch(search);
+    setAppliedLocation(location);
+    setAppliedMinFees(minFees);
+    setAppliedMaxFees(maxFees);
+    setAppliedMinRating(minRating);
+  };
 
-  // DEBOUNCE
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedMinFees(minFees);
+  // CLEAR ALL FILTERS
+  const handleClearFilters = () => {
+    setPage(1);
+    setSearch("");
+    setLocation("");
+    setMinFees("");
+    setMaxFees("");
+    setMinRating("");
 
-      setDebouncedMaxFees(maxFees);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [minFees, maxFees]);
-
-  // FETCH SAVED COLLEGES
-  useEffect(() => {
-    const fetchSavedColleges = async () => {
-      try {
-        const response = await fetch(
-          import.meta.env.VITE_BACKEND_URL + `/api/saved_colleges/${user.id}`,
-          {
-            credentials: "include",
-          },
-        );
-
-        const data = await response.json();
-
-        if (data.success) {
-          const savedIds = data.savedColleges.map((item) => item.college.id);
-
-          setSavedColleges(new Set(savedIds));
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (isAuthenticated) {
-      fetchSavedColleges();
-    }
-  }, [isAuthenticated]);
+    setAppliedSearch("");
+    setAppliedLocation("");
+    setAppliedMinFees("");
+    setAppliedMaxFees("");
+    setAppliedMinRating("");
+  };
 
   // FETCH COLLEGES
   useEffect(() => {
     const fetchColleges = async () => {
-      if (!isAuthenticated) {
-        setError("Please login to view colleges");
-
-        setLoading(false);
-
-        return;
-      }
-
       try {
         setLoading(true);
-
         setError(null);
 
-        // QUERY PARAMS
-        const query = new URLSearchParams({
-          page,
-          limit: 6,
-        });
+        const query = new URLSearchParams({ page, limit: 6 });
 
-        if (search) query.append("search", search);
-
-        if (location) query.append("location", location);
-
-        if (debouncedMinFees) query.append("minFees", debouncedMinFees);
-
-        if (debouncedMaxFees) query.append("maxFees", debouncedMaxFees);
-
-        if (minRating) query.append("minRating", minRating);
+        if (appliedSearch) query.append("search", appliedSearch);
+        if (appliedLocation) query.append("city", appliedLocation);
+        if (appliedMinFees) query.append("minFees", appliedMinFees);
+        if (appliedMaxFees) query.append("maxFees", appliedMaxFees);
+        if (appliedMinRating) query.append("minRating", appliedMinRating);
 
         const response = await fetch(
-          import.meta.env.VITE_BACKEND_URL + `/api/colleges?${query.toString()}`,
-          {
-            method: "GET",
-
-            headers: {
-              "Content-Type": "application/json",
-            },
-
-            credentials: "include",
-          },
+          `${import.meta.env.VITE_BACKEND_URL}/api/colleges?${query.toString()}`,
+          { credentials: "include" }
         );
 
-        if (!response.ok) {
-          if (response.status === 401) {
-            logoutUser();
-
-            throw new Error("Session expired. Please login again.");
-          }
-
-          const errorData = await response.json().catch(() => ({}));
-
-          throw new Error(errorData.message || "Failed to fetch colleges");
-        }
+        if (!response.ok) throw new Error("Failed to fetch colleges");
 
         const data = await response.json();
 
         setColleges(data.colleges || []);
-
+        setTotalColleges(data.totalColleges || 0);
         setTotalPages(data.totalPages || 1);
       } catch (err) {
-        console.log(err);
-
+        console.error(err);
         setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
     };
 
-    if (!authLoading) {
-      fetchColleges();
-    }
-  }, [
-    page,
-    search,
-    location,
-    debouncedMinFees,
-    debouncedMaxFees,
-    minRating,
-    isAuthenticated,
-    authLoading,
-    logoutUser,
-  ]);
+    fetchColleges();
+  }, [page, appliedSearch, appliedLocation, appliedMinFees, appliedMaxFees, appliedMinRating]);
 
-  // SAVE / UNSAVE
-  const handleSave = (id) => {
+  // FETCH SAVED COLLEGES
+  useEffect(() => {
+    const fetchSavedColleges = async () => {
+      if (!user) return;
+
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/saved_colleges/${user.id}`,
+          { credentials: "include" }
+        );
+        const data = await res.json();
+
+        if (data.success && data.savedColleges) {
+          const savedIds = new Set(data.savedColleges.map((item) => item.college.id));
+          setSavedColleges(savedIds);
+        }
+      } catch (err) {
+        console.error("Error fetching saved colleges:", err);
+      }
+    };
+
+    fetchSavedColleges();
+  }, [user]);
+
+  const handleSave = (id, isSaved) => {
     setSavedColleges((prev) => {
       const newSet = new Set(prev);
-
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-
+      if (isSaved) newSet.add(id);
+      else newSet.delete(id);
       return newSet;
     });
   };
 
-  const handleCompare = (id) => {
-    setSelectedColleges((prev) => {
-      // REMOVE
-      if (prev.includes(id)) {
-        const updated = prev.filter((collegeId) => collegeId !== id);
+  if (loading) return <CollegePageSkeleton />;
 
-        if (updated.length === 0) {
-          setShowCompareBar(false);
-        }
-
-        return updated;
-      }
-
-      // MAX 3
-      if (prev.length >= 3) {
-        return prev;
-      }
-
-      // SHOW BAR
-      setShowCompareBar(true);
-
-      return [...prev, id];
-    });
-  };
-
-  // LOADING
-  if (loading || authLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8">Discover Colleges</h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl h-[460px] animate-pulse shadow-sm"
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ERROR
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-            Access Denied
-          </h2>
-
-          <p className="text-red-600 text-lg mb-6">{error}</p>
-
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2">Something went wrong</h2>
+          <p className="text-red-600 mb-6">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors"
+            className="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-medium"
           >
             Try Again
           </button>
@@ -252,94 +159,110 @@ const CollegesPage = () => {
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">
-              Discover Colleges
-            </h1>
-
-            <p className="text-gray-600 mt-2">
-              Find the best colleges based on your preferences
-            </p>
+            <h1 className="text-4xl font-bold text-gray-900">Discover Colleges</h1>
+            <p className="text-gray-600 mt-2">Find the best colleges based on your preferences</p>
           </div>
-
-          <p className="text-gray-600 font-medium">
-            {colleges.length} colleges found
-          </p>
-        </div>
-
-        {/* SEARCH */}
-        <div className="mb-6 hidden">
-          <SearchBar
-            onSearch={(value) => {
-              setPage(1);
-              setSearch(value);
-            }}
-          />
+          <p className="text-gray-600 font-medium">{totalColleges} colleges found</p>
         </div>
 
         {/* FILTERS */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {/* LOCATION */}
-            <input
-              type="text"
-              placeholder="Location"
-              value={location}
-              onChange={(e) => {
-                setPage(1);
+        <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl shadow-md mb-8 border border-orange-100">
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-4 pb-2 border-b border-orange-200">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                <h3 className="font-semibold text-gray-800">Filter Colleges</h3>
+              </div>
 
-                setLocation(e.target.value);
-              }}
-              className="border rounded-xl px-4 py-3 outline-none"
-            />
+              <button
+                onClick={handleClearFilters}
+                className="flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors text-sm font-medium"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Clear Filters
+              </button>
+            </div>
 
-            {/* MIN FEES */}
-            <input
-              type="number"
-              placeholder="Min Fees"
-              value={minFees}
-              onChange={(e) => {
-                setPage(1);
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              {/* Location */}
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="City or area"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="w-full border border-gray-200 rounded-xl pl-9 pr-4 py-2.5 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 bg-white transition-all text-sm"
+                />
+              </div>
 
-                setMinFees(e.target.value);
-              }}
-              className="border rounded-xl px-4 py-3 outline-none"
-            />
+              {/* Min Fees */}
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">₹</div>
+                <input
+                  type="number"
+                  placeholder="Min fees"
+                  value={minFees}
+                  onChange={(e) => setMinFees(e.target.value)}
+                  className="w-full border border-gray-200 rounded-xl pl-7 pr-4 py-2.5 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 bg-white transition-all text-sm"
+                />
+              </div>
 
-            {/* MAX FEES */}
-            <input
-              type="number"
-              placeholder="Max Fees"
-              value={maxFees}
-              onChange={(e) => {
-                setPage(1);
+              {/* Max Fees */}
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">₹</div>
+                <input
+                  type="number"
+                  placeholder="Max fees"
+                  value={maxFees}
+                  onChange={(e) => setMaxFees(e.target.value)}
+                  className="w-full border border-gray-200 rounded-xl pl-7 pr-4 py-2.5 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 bg-white transition-all text-sm"
+                />
+              </div>
 
-                setMaxFees(e.target.value);
-              }}
-              className="border rounded-xl px-4 py-3 outline-none"
-            />
+              {/* Rating */}
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <span className="text-lg">★</span>
+                </div>
+                <select
+                  value={minRating}
+                  onChange={(e) => setMinRating(e.target.value)}
+                  className="w-full border border-gray-200 rounded-xl pl-9 pr-8 py-2.5 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 bg-white appearance-none cursor-pointer transition-all text-sm"
+                >
+                  <option value="">Any rating</option>
+                  <option value="1">1★ & above</option>
+                  <option value="2">2★ & above</option>
+                  <option value="3">3★ & above</option>
+                  <option value="4">4★ & above</option>
+                  <option value="5">5★ only</option>
+                </select>
+              </div>
 
-            {/* RATING */}
-            <select
-              value={minRating}
-              onChange={(e) => {
-                setPage(1);
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleApplyFilters}
+                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-2.5 font-medium transition-all shadow-sm"
+                >
+                  Apply Filters
+                </button>
 
-                setMinRating(e.target.value);
-              }}
-              className="border rounded-xl px-4 py-3 outline-none"
-            >
-              <option value="">Minimum Rating</option>
-
-              <option value="1">1+</option>
-
-              <option value="2">2+</option>
-
-              <option value="3">3+</option>
-
-              <option value="4">4+</option>
-
-              <option value="5">5</option>
-            </select>
+                <button
+                  onClick={handleClearFilters}
+                  className="flex-1 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-2.5 font-medium transition-all"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -357,68 +280,26 @@ const CollegesPage = () => {
               ))}
             </div>
 
-            {/* COMPARE BAR */}
-            {showCompareBar && selectedColleges.length > 0 && (
-              <div className="fixed bottom-0 left-0 w-full bg-white border-t shadow-2xl z-50 px-4 py-4">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-                  {/* LEFT */}
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {selectedColleges.length} College
-                      {selectedColleges.length > 1 ? "s" : ""} Selected
-                    </h3>
+            <CompareBar />
 
-                    <p className="text-sm text-gray-500">
-                      Select up to 3 colleges to compare
-                    </p>
-                  </div>
-
-                  {/* RIGHT */}
-                  <div className="flex items-center gap-3">
-                    {/* CLOSE */}
-                    <button
-                      onClick={() => {
-                        setSelectedColleges([]);
-                        setShowCompareBar(false);
-                      }}
-                      className="px-5 py-2 rounded-xl border border-gray-300 hover:bg-gray-100 transition"
-                    >
-                      Clear
-                    </button>
-
-                    {/* COMPARE */}
-                    <button
-                      disabled={selectedColleges.length < 2}
-                      onClick={() =>
-                        navigate(`/compare?ids=${selectedColleges.join(",")}`)
-                      }
-                      className="bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white px-6 py-3 rounded-xl font-semibold transition-all"
-                    >
-                      Compare Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* PAGINATION */}
-            <div className="flex justify-center items-center gap-4 mt-10">
+            {/* Pagination */}
+            <div className="flex justify-center items-center gap-4 mt-12">
               <button
                 disabled={page === 1}
-                onClick={() => setPage((prev) => prev - 1)}
-                className="px-5 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+                onClick={() => setPage((p) => p - 1)}
+                className="px-6 py-2.5 bg-gray-200 rounded-xl disabled:opacity-50 hover:bg-gray-300 transition"
               >
-                Prev
+                Previous
               </button>
 
-              <span className="font-semibold text-lg">
-                {page} / {totalPages}
+              <span className="font-semibold text-lg px-4">
+                {page} of {totalPages}
               </span>
 
               <button
                 disabled={page === totalPages}
-                onClick={() => setPage((prev) => prev + 1)}
-                className="px-5 py-2 bg-orange-500 text-white rounded-lg disabled:opacity-50"
+                onClick={() => setPage((p) => p + 1)}
+                className="px-6 py-2.5 bg-orange-600 text-white rounded-xl disabled:opacity-50 hover:bg-orange-700 transition"
               >
                 Next
               </button>
@@ -426,13 +307,16 @@ const CollegesPage = () => {
           </>
         ) : (
           <div className="text-center py-20">
-            <div className="text-gray-400 text-6xl mb-4">🏫</div>
-
-            <h3 className="text-xl font-semibold text-gray-700">
-              No colleges found
-            </h3>
-
-            <p className="text-gray-500 mt-2">Please try different filters.</p>
+            <School className="w-20 h-20 text-gray-300 mx-auto mb-6" strokeWidth={1.5} />
+            <h3 className="text-2xl font-semibold text-gray-700 mb-2">No colleges found</h3>
+            <p className="text-gray-500 mb-8">Try adjusting your filters</p>
+            <button
+              onClick={handleClearFilters}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-medium"
+            >
+              <RotateCcw className="w-5 h-5" />
+              Clear All Filters
+            </button>
           </div>
         )}
       </div>

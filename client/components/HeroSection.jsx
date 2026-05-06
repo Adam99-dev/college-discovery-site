@@ -48,30 +48,44 @@ const HeroPrediction = () => {
                   📊
                 </div>
                 <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
-                  Rank Predictors
+                  Rank & College Predictors
                 </h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {["JEE Main Rank Predictor"].map((rank, i) => (
-                  <button
-                    key={i}
-                    className="group px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-medium border border-gray-200 hover:border-orange-300 hover:bg-orange-50 rounded-xl sm:rounded-2xl transition-all duration-300 hover:shadow-md active:scale-98 sm:active:scale-100"
-                  >
-                    <span className="text-gray-700 group-hover:text-red-700 transition-colors">
-                      {rank}
-                    </span>
-                  </button>
-                ))}
+                {["JEE Main Rank Predictor", "College Predictor"].map(
+                  (rank, i) => (
+                    <button
+                      key={i}
+                      className="group px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-medium border border-gray-200 hover:border-orange-300 hover:bg-orange-50 rounded-xl sm:rounded-2xl transition-all duration-300 hover:shadow-md active:scale-98 sm:active:scale-100"
+                    >
+                      <span className="text-gray-700 group-hover:text-red-700 transition-colors">
+                        {rank}
+                      </span>
+                    </button>
+                  ),
+                )}
               </div>
             </div>
 
             {/* CTA Button */}
             <div className="pt-2 sm:pt-4">
-              <button className="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold text-base sm:text-lg px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-lg shadow-orange-200 transition-all duration-300 hover:scale-105 active:scale-98 flex items-center justify-center gap-3">
-                Start Free Prediction
-                <span className="text-xl sm:text-2xl">→</span>
-              </button>
+              <div className="relative inline-block w-full sm:w-auto">
+                <button
+                  disabled
+                  className="w-full sm:w-auto bg-gradient-to-r from-gray-400 to-gray-500 text-white font-semibold text-base sm:text-lg px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-lg opacity-70 cursor-not-allowed flex items-center justify-center gap-3 relative overflow-hidden"
+                >
+                  Start Predicting
+                  <span className="text-xl sm:text-2xl">→</span>
+                </button>
+
+                {/* Animated Diagonal Coming Soon Ribbon */}
+                <div className="absolute -top-1 overflow-hidden w-full h-32 pointer-events-none">
+                  <div className="absolute bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] sm:text-[11px] font-bold py-1.5  top-[20px] w-full text-center shadow-lg animate-pulse">
+                    <span className="tracking-wider">✦ COMING SOON ✦</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

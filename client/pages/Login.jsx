@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { refreshAuth } = useAuth();
+  const { loginUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -27,14 +27,17 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        import.meta.env.VITE_BACKEND_URL + "/api/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
         },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      );
 
       const data = await response.json();
 
@@ -44,8 +47,7 @@ const Login = () => {
 
       toast.success(data.message);
 
-      await refreshAuth();
-
+      loginUser(data.user); // 🔥 FIX
       navigate("/");
     } catch (error) {
       console.log(error);

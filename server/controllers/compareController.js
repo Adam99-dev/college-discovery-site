@@ -23,30 +23,58 @@ export const compareColleges = async (req, res) => {
       });
     }
 
+    if (collegeIds.length > 3) {
+      return res.status(400).json({
+        success: false,
+        message: "You can compare max 3 colleges",
+      });
+    }
+
     const colleges = await prisma.college.findMany({
       where: {
-        id: {
-          in: collegeIds,
-        },
+        id: { in: collegeIds },
       },
-
       select: {
         id: true,
         name: true,
-        location: true,
-        fees: true,
+        slug: true,
+        city: true,
+        state: true,
+        feesMin: true,
+        feesMax: true,
         rating: true,
+        ranking: true,
         placementPercentage: true,
+        averagePackage: true,
+        highestPackage: true,
+        establishedYear: true,
+        totalStudents: true,
+        exams: true,
+        campusArea: true,
+        image: true,
+
+        courses: {
+          select: {
+            name: true,
+            duration: true,
+            fees: true,
+          },
+        },
       },
     });
 
+    // 🔥 preserve order
+    const orderedColleges = collegeIds.map((id) =>
+      colleges.find((c) => c.id === id)
+    );
+
     res.status(200).json({
       success: true,
-      count: colleges.length,
-      colleges,
+      count: orderedColleges.length,
+      colleges: orderedColleges,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     res.status(500).json({
       success: false,

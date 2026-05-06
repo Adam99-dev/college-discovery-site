@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CollegeDataPlatform() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-[#f8fafc] py-10 px-4 md:px-6 font-sans">
       <div className="max-w-7xl mx-auto">
@@ -12,9 +13,12 @@ export default function CollegeDataPlatform() {
           </h1>
           <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
             We simplify information for you on over{" "}
-            <span className="font-semibold text-gray-800">40,250 Colleges </span> <span>and </span>
             <span className="font-semibold text-gray-800">
-               3,51,875 Courses
+              40,250 Colleges{" "}
+            </span>{" "}
+            <span>and </span>
+            <span className="font-semibold text-gray-800">
+              3,51,875 Courses
             </span>{" "}
             across domains and regions all over India
           </p>
@@ -50,6 +54,15 @@ export default function CollegeDataPlatform() {
                   </Link>
                 ))}
               </div>
+              <div className="pt-2 sm:pt-4 mt-2">
+                <button
+                  onClick={() => navigate("/colleges")}
+                  className="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold text-base sm:text-lg px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-lg shadow-orange-200 transition-all duration-300 hover:scale-105 active:scale-98 flex items-center justify-center gap-3"
+                >
+                  Start Comparing
+                  <span className="text-xl sm:text-2xl">→</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -61,11 +74,7 @@ export default function CollegeDataPlatform() {
                 {/* Placeholder for your actual image/illustration */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <img
-                      className=""
-                      src="./college.avif"
-                      alt=""
-                    />
+                    <img className="" src="./college.avif" alt="" />
                   </div>
                 </div>
               </div>

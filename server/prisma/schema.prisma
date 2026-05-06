@@ -12,6 +12,8 @@ model User {
   name          String
   email         String         @unique
   password      String
+  createdAt     DateTime       @default(now())
+  reviews       Review[]
   savedColleges SavedCollege[]
 
   @@index([email])
@@ -20,30 +22,72 @@ model User {
 model College {
   id                  Int            @id @default(autoincrement())
   name                String
-  location            String
-  fees                Int
-  rating              Float
-  placementPercentage Int
+  slug                String         @unique
+  city                String
+  state               String
+  feesMin             Int
+  feesMax             Int
+  rating              Float?
+  ranking             Int?
+  placementPercentage Int?
+  averagePackage      Float?
+  highestPackage      Float?
+  establishedYear     Int?
+  totalStudents       Int?
   description         String
+  image               String?
+  exams               String[]
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  campusArea          String?        @default(dbgenerated("500"))
+  courses             Course[]
+  reviews             Review[]
   savedBy             SavedCollege[]
 
   @@index([name])
-  @@index([location])
-  @@index([fees])
-  @@index([placementPercentage])
+  @@index([slug])
+  @@index([city])
+  @@index([state])
+  @@index([feesMin, feesMax])
   @@index([rating(sort: Desc)])
-  @@index([location, fees])
-  @@index([rating, fees])
-  @@index([name, location])
-  @@index([location, rating])
+  @@index([city, feesMin])
+  @@index([placementPercentage])
+}
+
+model Course {
+  id        Int     @id @default(autoincrement())
+  name      String
+  seats     Int     @default(60)
+  duration  String
+  fees      Int?
+  collegeId Int
+  college   College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([name])
+  @@index([collegeId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  collegeId Int
+  rating    Float
+  comment   String?
+  createdAt DateTime @default(now())
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId])
+  @@index([userId])
 }
 
 model SavedCollege {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
   collegeId Int
-  college   College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, collegeId])
   @@index([userId])

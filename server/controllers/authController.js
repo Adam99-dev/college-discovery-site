@@ -43,6 +43,7 @@ export const register = async (req, res) => {
         id: true,
         name: true,
         email: true,
+        token: token
       },
     });
 
@@ -119,6 +120,7 @@ export const login = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        token: token,
       },
     });
   } catch (error) {
