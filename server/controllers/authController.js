@@ -43,7 +43,7 @@ export const register = async (req, res) => {
         id: true,
         name: true,
         email: true,
-        token: token
+        token: token,
       },
     });
 
@@ -136,7 +136,11 @@ export const login = async (req, res) => {
 // LOGOUT
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
 
     return res.status(200).json({
       success: true,
@@ -180,5 +184,3 @@ export const getMe = async (req, res) => {
     });
   }
 };
-
-
