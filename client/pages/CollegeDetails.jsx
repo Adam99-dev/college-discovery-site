@@ -17,7 +17,7 @@ import {
   Phone,
   Share,
   Download,
-  Check
+  Check,
 } from "lucide-react";
 
 import { useParams, Link } from "react-router-dom";
@@ -40,6 +40,8 @@ const CollegeDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
 
   useEffect(() => {
     const fetchCollege = async () => {
@@ -79,11 +81,25 @@ const CollegeDetails = () => {
 
           setRecommendedColleges(filtered);
         }
+
+        const reviewsResponse = await fetch(
+          import.meta.env.VITE_BACKEND_URL + `/api/reviews/${slug}`,
+          {
+            credentials: "include",
+          },
+        );
+
+        const reviewsData = await reviewsResponse.json();
+
+        if (reviewsData.success) {
+          setReviews(reviewsData.reviews);
+        }
       } catch (err) {
         console.error("Error fetching college:", err);
         setError("Failed to load college details.");
       } finally {
         setLoading(false);
+        setReviewsLoading(false);
       }
     };
 
@@ -140,7 +156,6 @@ const CollegeDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50/30">
-
       <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -156,7 +171,8 @@ const CollegeDetails = () => {
                 onClick={shareCollege}
                 className="text-orange-600 border-orange-200 inline-flex items-center gap-2 bg-orange-200 px-2 py-1 hover:bg-orange-100 rounded-xl transition-colors"
               >
-                {text === "Share" ? <Share size={20} /> : <Check size={20} />} {text}
+                {text === "Share" ? <Share size={20} /> : <Check size={20} />}{" "}
+                {text}
               </button>
             </div>
           </div>
@@ -164,9 +180,7 @@ const CollegeDetails = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-
         <div className="grid lg:grid-cols-5 gap-6 mb-12">
-
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video">
               <img
@@ -175,7 +189,6 @@ const CollegeDetails = () => {
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
 
               <div className="absolute bottom-0 left-0 right-0 p-8">
                 <div className="flex items-center gap-2 mb-3">
@@ -205,7 +218,6 @@ const CollegeDetails = () => {
             </div>
           </div>
 
-
           <div className="lg:col-span-2 grid grid-cols-2 gap-4">
             {randomImages.slice(1, 5).map((img, index) => (
               <div
@@ -221,7 +233,6 @@ const CollegeDetails = () => {
             ))}
           </div>
         </div>
-
 
         <div className="border-b border-gray-200 mb-8">
           <div className="flex gap-8 overflow-x-auto">
@@ -247,9 +258,7 @@ const CollegeDetails = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-
           <div className="lg:col-span-2 space-y-8">
-
             {activeTab === "overview" && (
               <>
                 {/* KEY STATS */}
@@ -311,7 +320,6 @@ const CollegeDetails = () => {
                   </div>
                 </div>
 
-
                 <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                   <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                     <BookOpen className="text-orange-600" />
@@ -321,7 +329,6 @@ const CollegeDetails = () => {
                     {college.description || "No description available."}
                   </p>
                 </div>
-
 
                 <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                   <h2 className="text-2xl font-bold mb-6">
@@ -389,7 +396,6 @@ const CollegeDetails = () => {
                   </div>
                 </div>
 
-
                 {college.exams && college.exams.length > 0 && (
                   <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                     <h2 className="text-2xl font-bold mb-4">Exams Accepted</h2>
@@ -407,7 +413,6 @@ const CollegeDetails = () => {
                 )}
               </>
             )}
-
 
             {activeTab === "courses" && college.courses && (
               <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 shadow-lg border border-gray-100">
@@ -443,11 +448,9 @@ const CollegeDetails = () => {
                       key={index}
                       className="group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-orange-200"
                     >
-
                       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600 rounded-l-2xl"></div>
 
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-3 flex-wrap">
                             <h3 className="text-xl font-bold text-gray-800 group-hover:text-orange-600 transition-colors">
@@ -457,7 +460,6 @@ const CollegeDetails = () => {
                               {course.duration}
                             </span>
                           </div>
-
 
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                             <div className="flex items-center gap-2">
@@ -540,7 +542,6 @@ const CollegeDetails = () => {
                           </div>
                         </div>
 
-
                         <button className="mt-4 md:mt-0 px-6 py-2.5 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                           Apply Now →
                         </button>
@@ -550,7 +551,6 @@ const CollegeDetails = () => {
                 </div>
               </div>
             )}
-
 
             {activeTab === "placements" && (
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
@@ -646,13 +646,55 @@ const CollegeDetails = () => {
             {activeTab === "reviews" && (
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                 <h2 className="text-2xl font-bold mb-6">Student Reviews</h2>
-                <div className="space-y-6">
-                  {/* Add dynamic reviews here */}
+
+                {reviewsLoading ? (
+                  <div className="text-center py-10 text-gray-500">
+                    Loading reviews...
+                  </div>
+                ) : reviews.length > 0 ? (
+                  <div className="space-y-5">
+                    {reviews.map((review) => (
+                      <div
+                        key={review.id}
+                        className="border border-gray-100 rounded-2xl p-5 bg-gray-50"
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <h3 className="font-semibold text-gray-800">
+                              {review.user.name}
+                            </h3>
+
+                            <p className="text-sm text-gray-500">
+                              {new Date(review.createdAt).toLocaleDateString(
+                                "en-IN",
+                              )}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-1">
+                            <Star
+                              size={16}
+                              className="text-yellow-400 fill-yellow-400"
+                            />
+
+                            <span className="font-semibold">
+                              {review.rating}
+                            </span>
+                          </div>
+                        </div>
+
+                        <p className="text-gray-700 leading-relaxed">
+                          {review.comment}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
                   <div className="text-center py-8 text-gray-500">
                     <Users size={48} className="mx-auto mb-3 opacity-50" />
-                    <p>No reviews yet. Be the first to review!</p>
+                    <p>No reviews available.</p>
                   </div>
-                </div>
+                )}
               </div>
             )}
           </div>

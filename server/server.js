@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import collegeRoutes from "./routes/collegeRoutes.js";
 import compareRoutes from "./routes/compareRoutes.js";
 import savedCollegeRoutes from "./routes/savedCollegeRoutes.js";
+import reviewsRoutes from "./routes/reviewsRoutes.js";
 
 import authMiddleware from "./middleware/authMiddleware.js";
 
@@ -37,6 +38,7 @@ app.use("/api/compare", compareRoutes); // compare colleges
 
 // PROTECTED ROUTES
 app.use("/api/saved_colleges", authMiddleware, savedCollegeRoutes);
+app.use("/api/reviews", reviewsRoutes); // compare colleges
 
 // server listens
 const PORT = process.env.PORT || 5000;
