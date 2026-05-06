@@ -51,7 +51,6 @@ const Signup = () => {
       loginUser(data.user);
       navigate("/");
     } catch (error) {
-      console.log(error);
       toast.error(error.message || "Signup failed");
     } finally {
       setLoading(false);

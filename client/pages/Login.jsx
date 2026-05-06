@@ -50,7 +50,6 @@ const Login = () => {
       loginUser(data.user);
       navigate("/");
     } catch (error) {
-      console.log(error);
       toast.error(error.message || "Login failed");
     } finally {
       setLoading(false);

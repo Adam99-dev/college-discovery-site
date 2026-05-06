@@ -11,7 +11,7 @@ import {
   LogOut,
   Menu,
   X,
-  ArrowUpNarrowWide,
+  
 } from "lucide-react";
 
 import SearchBar from "../components/SearchBar.jsx";
@@ -69,7 +69,6 @@ export default function Navbar() {
     { name: "Home", path: "/", icon: Home },
     { name: "Colleges", path: "/colleges", icon: GraduationCap },
     { name: "Compare", path: "/compare", icon: GitCompareArrows },
-    { name: "Predictors", path: "/predict", icon: ArrowUpNarrowWide },
   ];
 
   const isActive = (path) => {

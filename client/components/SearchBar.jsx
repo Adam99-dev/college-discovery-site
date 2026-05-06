@@ -68,7 +68,6 @@ const SearchBar = ({
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const data = await response.json();
-      console.log("API Response:", data); // DEBUG
 
       if (data.success) {
         const results = data.colleges || [];
