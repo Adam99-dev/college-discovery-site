@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 Check auth from backend
+
   const checkAuth = async () => {
     try {
       const res = await fetch(
@@ -31,15 +31,15 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  // 🔥 FIX 1: instant UI update
+
   const loginUser = (userData) => {
-    setUser(userData); // immediate update
+    setUser(userData);
   };
 
-  // 🔥 FIX 2: optional re-sync (background)
+
   const loginAndSync = async (userData) => {
-    setUser(userData); // instant UI
-    await checkAuth(); // sync with backend (optional)
+    setUser(userData);
+    await checkAuth();
   };
 
   const logoutUser = async () => {
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         isAuthenticated: !!user,
         loginUser,
-        loginAndSync, // 🔥 new
+        loginAndSync,
         logoutUser,
         refreshAuth: checkAuth,
       }}

@@ -140,7 +140,7 @@ const CollegeDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50/30">
-      {/* TOP BAR */}
+
       <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -164,9 +164,9 @@ const CollegeDetails = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* HERO SECTION */}
+
         <div className="grid lg:grid-cols-5 gap-6 mb-12">
-          {/* MAIN IMAGE */}
+
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video">
               <img
@@ -176,7 +176,7 @@ const CollegeDetails = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-              {/* Overlay Content */}
+
               <div className="absolute bottom-0 left-0 right-0 p-8">
                 <div className="flex items-center gap-2 mb-3">
                   {college.ranking && (
@@ -205,7 +205,7 @@ const CollegeDetails = () => {
             </div>
           </div>
 
-          {/* GALLERY THUMBNAILS */}
+
           <div className="lg:col-span-2 grid grid-cols-2 gap-4">
             {randomImages.slice(1, 5).map((img, index) => (
               <div
@@ -222,7 +222,7 @@ const CollegeDetails = () => {
           </div>
         </div>
 
-        {/* TABS NAVIGATION */}
+
         <div className="border-b border-gray-200 mb-8">
           <div className="flex gap-8 overflow-x-auto">
             {["overview", "courses", "placements", "admissions", "reviews"].map(
@@ -246,11 +246,10 @@ const CollegeDetails = () => {
           </div>
         </div>
 
-        {/* MAIN CONTENT */}
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* LEFT SIDE - MAIN CONTENT */}
+
           <div className="lg:col-span-2 space-y-8">
-            {/* OVERVIEW TAB */}
+
             {activeTab === "overview" && (
               <>
                 {/* KEY STATS */}
@@ -312,7 +311,7 @@ const CollegeDetails = () => {
                   </div>
                 </div>
 
-                {/* DESCRIPTION */}
+
                 <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                   <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                     <BookOpen className="text-orange-600" />
@@ -323,7 +322,7 @@ const CollegeDetails = () => {
                   </p>
                 </div>
 
-                {/* INFRASTRUCTURE & FACILITIES */}
+
                 <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                   <h2 className="text-2xl font-bold mb-6">
                     Infrastructure & Facilities
@@ -390,7 +389,7 @@ const CollegeDetails = () => {
                   </div>
                 </div>
 
-                {/* EXAMS ACCEPTED */}
+
                 {college.exams && college.exams.length > 0 && (
                   <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                     <h2 className="text-2xl font-bold mb-4">Exams Accepted</h2>
@@ -409,7 +408,7 @@ const CollegeDetails = () => {
               </>
             )}
 
-            {/* COURSES TAB */}
+
             {activeTab === "courses" && college.courses && (
               <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 shadow-lg border border-gray-100">
                 <div className="flex items-center justify-between mb-8">
@@ -444,11 +443,11 @@ const CollegeDetails = () => {
                       key={index}
                       className="group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-orange-200"
                     >
-                      {/* Decorative gradient bar */}
+
                       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600 rounded-l-2xl"></div>
 
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        {/* Course Name & Badge */}
+
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-3 flex-wrap">
                             <h3 className="text-xl font-bold text-gray-800 group-hover:text-orange-600 transition-colors">
@@ -459,7 +458,7 @@ const CollegeDetails = () => {
                             </span>
                           </div>
 
-                          {/* Stats Grid */}
+
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                             <div className="flex items-center gap-2">
                               <div className="p-2 bg-orange-50 rounded-lg">
@@ -541,7 +540,7 @@ const CollegeDetails = () => {
                           </div>
                         </div>
 
-                        {/* CTA Button */}
+
                         <button className="mt-4 md:mt-0 px-6 py-2.5 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                           Apply Now →
                         </button>
@@ -552,7 +551,7 @@ const CollegeDetails = () => {
               </div>
             )}
 
-            {/* PLACEMENTS TAB */}
+
             {activeTab === "placements" && (
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
                 <h2 className="text-2xl font-bold mb-6">

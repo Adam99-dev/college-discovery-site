@@ -1,9 +1,9 @@
 import { useCompare } from "../context/CompareContext";
-import { useAuth } from "../context/AuthContext.jsx"; // ✅ ADD THIS
+import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { GitCompareArrows, X } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { toast } from "react-toastify"; // ✅ ADD THIS
+import { toast } from "react-toastify";
 
 const CompareBar = () => {
   const {
@@ -15,7 +15,7 @@ const CompareBar = () => {
     MAX_COMPARE_ITEMS = 3,
   } = useCompare();
 
-  const { user } = useAuth(); // ✅ ADD THIS
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [isNavigating, setIsNavigating] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -84,11 +84,11 @@ const CompareBar = () => {
     setColleges(collegeList);
   }, [compareIds, compareItems]);
 
-  // ✅ MODIFIED: Check authentication before comparing
+
   const handleCompare = useCallback(async () => {
     setErrorMessage("");
 
-    // ✅ Check if user is logged in
+
     if (!user) {
       toast.warning(
         <div>
@@ -174,7 +174,7 @@ const CompareBar = () => {
   return (
     <div className="left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 animate-slide-up">
       <div className="px-3 py-3 max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <GitCompareArrows className="w-4 h-4 text-orange-500" />
@@ -196,7 +196,7 @@ const CompareBar = () => {
           )}
         </div>
 
-        {/* Colleges List */}
+
         {colleges.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3 justify-center">
             {colleges.map((college, idx) => (
@@ -226,7 +226,7 @@ const CompareBar = () => {
           </div>
         )}
 
-        {/* Loading State for Missing Colleges */}
+
         {isLoading && colleges.length === 0 && (
           <div className="flex justify-center items-center gap-2 mb-3 py-2">
             <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
@@ -234,7 +234,7 @@ const CompareBar = () => {
           </div>
         )}
 
-        {/* Error Message */}
+
         {errorMessage && (
           <div className="mb-2 text-center animate-pulse">
             <span className="text-xs text-red-500 bg-red-50 px-2 py-1 rounded">
@@ -243,7 +243,7 @@ const CompareBar = () => {
           </div>
         )}
 
-        {/* Compare Button */}
+
         <button
           onClick={handleCompare}
           disabled={colleges.length < 2 || isNavigating || isLoading}
@@ -270,14 +270,14 @@ const CompareBar = () => {
           )}
         </button>
 
-        {/* Helper Text */}
+
         {colleges.length === 1 && (
           <p className="text-center text-xs text-gray-400 mt-2">
             Add one more college to enable comparison
           </p>
         )}
 
-        {/* ✅ Login helper text when not logged in */}
+
         {!user && colleges.length >= 2 && (
           <p className="text-center text-xs text-orange-500 mt-2">
             🔐 Please login to compare colleges

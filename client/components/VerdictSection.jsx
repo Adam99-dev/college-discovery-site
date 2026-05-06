@@ -1,5 +1,3 @@
-// VerdictSection.jsx
-import React from "react";
 import {
   Crown,
   Star,
@@ -9,9 +7,7 @@ import {
   LandPlot,
   UsersRound,
   Trophy,
-  ThumbsUp,
   Sparkles,
-  CheckCircle,
 } from "lucide-react";
 import {
   getBestRatingCollege,
@@ -180,11 +176,9 @@ const VerdictSection = ({ colleges }) => {
     return recommendations;
   };
 
-  const recommendations = getRecommendation();
-
   return (
     <div className="space-y-6">
-      {/* Overall Best College - Hero Section */}
+
       {overallBest && overallBestData && overallBestData.count > 0 && (
         <div className="relative bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 rounded-2xl overflow-hidden shadow-lg border border-yellow-200">
           <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-200 rounded-full filter blur-3xl opacity-20"></div>
@@ -259,7 +253,7 @@ const VerdictSection = ({ colleges }) => {
         </div>
       )}
 
-      {/* Category-wise Best Colleges */}
+
       <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
           <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">

@@ -1,8 +1,6 @@
 import prisma from "../config/db.js";
 
-// ======================
-// 1. Register a new College
-// ======================
+// REGISTER COLLEGE
 export const registerCollege = async (req, res) => {
   try {
     const {
@@ -67,6 +65,7 @@ export const registerCollege = async (req, res) => {
   }
 };
 
+// GET ALL COLLEGES
 export const getAllColleges = async (req, res) => {
   try {
     const {
@@ -99,7 +98,7 @@ export const getAllColleges = async (req, res) => {
       ];
     }
 
-    // Additional filters (if any)
+    // Filters
     if (city?.trim()) {
       where.city = { contains: city.trim(), mode: "insensitive" };
     }
@@ -170,6 +169,7 @@ export const getAllColleges = async (req, res) => {
 
 export const getSingleCollege = async (req, res) => {
   try {
+    // slug to hide ids
     const { slug } = req.params;
 
     const college = await prisma.college.findUnique({

@@ -12,9 +12,9 @@ const CompareContext = createContext();
 
 export const CompareProvider = ({ children }) => {
   const [compareIds, setCompareIds] = useState([]);
-  const [compareItems, setCompareItems] = useState({}); // Map: id -> college object
+  const [compareItems, setCompareItems] = useState({});
   const [initialized, setInitialized] = useState(false);
-  const isUpdatingFromURL = useRef(false); // Prevent loops
+  const isUpdatingFromURL = useRef(false);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ export const CompareProvider = ({ children }) => {
         .split(",")
         .map(Number)
         .filter(id => !isNaN(id) && Number.isInteger(id))
-        .slice(0, MAX_COMPARE_ITEMS); // Limit to max items
+        .slice(0, MAX_COMPARE_ITEMS);
       
       if (ids.length > 0 && JSON.stringify(ids) !== JSON.stringify(compareIds)) {
         setCompareIds(ids);
@@ -85,15 +85,15 @@ export const CompareProvider = ({ children }) => {
     }
   }, [compareIds, initialized, isComparePage, location.search, navigate]);
 
-  // ✅ Toggle college in compare list
+
   const toggleCompare = useCallback((college) => {
-    // Handle both object and ID parameter
+
     const collegeId = typeof college === 'object' ? college.id : college;
     const collegeData = typeof college === 'object' ? college : null;
     
     setCompareIds((prev) => {
       if (prev.includes(collegeId)) {
-        // Remove from compare
+
         setCompareItems(items => {
           const newItems = { ...items };
           delete newItems[collegeId];
@@ -108,7 +108,7 @@ export const CompareProvider = ({ children }) => {
         return prev;
       }
       
-      // Store college data if provided
+
       if (collegeData) {
         setCompareItems(items => ({ ...items, [collegeId]: collegeData }));
       }
@@ -117,19 +117,18 @@ export const CompareProvider = ({ children }) => {
     });
   }, []);
 
-  // ✅ Add college data after fetching if only ID exists
+
   const addCollegeData = useCallback((id, collegeData) => {
     if (compareIds.includes(id) && !compareItems[id]) {
       setCompareItems(items => ({ ...items, [id]: collegeData }));
     }
   }, [compareIds, compareItems]);
 
-  // ✅ Check if college is in compare list
   const isInCompare = useCallback((id) => {
     return compareIds.includes(id);
   }, [compareIds]);
 
-  // ✅ Remove single college
+
   const removeCompare = useCallback((id) => {
     setCompareIds(prev => prev.filter(c => c !== id));
     setCompareItems(items => {
@@ -139,7 +138,7 @@ export const CompareProvider = ({ children }) => {
     });
   }, []);
 
-  // ✅ Clear all
+
   const clearCompare = useCallback(() => {
     setCompareIds([]);
     setCompareItems({});

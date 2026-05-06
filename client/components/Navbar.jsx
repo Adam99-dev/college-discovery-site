@@ -154,7 +154,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[72px]">
-          {/* Logo */}
+
           <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
             <div className="relative">
               <div className="w-11 h-11 rounded-xl overflow-hidden ring-2 ring-orange-100 group-hover:ring-orange-500 transition-all duration-200">
@@ -174,21 +174,21 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+
           <div className="hidden lg:flex items-center gap-2">
             {routes.map((route) => (
               <NavLink key={route.name} route={route} />
             ))}
           </div>
 
-          {/* Right Section */}
+
           <div className="flex items-center gap-2">
-            {/* Desktop Search */}
+
             <div className="hidden md:block">
               <SearchBar />
             </div>
 
-            {/* Mobile Search Toggle */}
+
             <button
               onClick={() => setIsSearchExpanded(!isSearchExpanded)}
               className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-all duration-200"
@@ -197,7 +197,7 @@ export default function Navbar() {
               <Search className="w-5 h-5 text-gray-600" />
             </button>
 
-            {/* Desktop Auth Buttons */}
+
             <div className="hidden lg:flex items-center gap-3">
               {!user ? (
                 <AuthButton
@@ -227,7 +227,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile Menu Toggle */}
+
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-all duration-200"
@@ -242,7 +242,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
+
         {isSearchExpanded && (
           <div className="md:hidden py-3 border-t border-gray-100 animate-slideDown">
             <SearchBar />
@@ -250,16 +250,15 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <>
-          {/* Backdrop */}
+
           <div
             className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40 animate-fadeIn"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
-          {/* Menu Panel */}
+
           <div className="lg:hidden absolute top-[72px] left-0 right-0 bg-white border-t border-gray-100 shadow-xl z-50 max-h-[calc(100vh-72px)] overflow-y-auto animate-slideDown">
             <div className="p-4 space-y-2">
               {routes.map((route) => (

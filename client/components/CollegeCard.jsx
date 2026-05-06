@@ -33,7 +33,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const SAVE_URL = `${BACKEND_URL}/api/saved_colleges`;
 
-  // Helper: Safe number formatting
+  // Helper: Safe number display
   const formatNumber = (value, isLakhs = false) => {
     if (!value && value !== 0) return "NA";
     if (isLakhs) return value.toLocaleString("en-IN");
@@ -89,7 +89,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
 
     setIsLoading(true);
 
-    // Optimistic update - immediately update UI
+    // update UI
     const newSavedState = !isSaved;
     onSave?.(college.id, newSavedState);
 
@@ -130,7 +130,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
   const handleCompareToggle = (e) => {
     e.stopPropagation();
 
-    // ✅ Add toast for compare when not logged in
+    // Add toast for compare when not logged in
     if (!user) {
       toast.warning(
         <div>
@@ -173,7 +173,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-orange-200 group">
-      {/* IMAGE SECTION */}
+
       <div className="relative h-48 overflow-hidden">
         <img
           src={college.image || "/placeholder-college.jpg"}
@@ -186,7 +186,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-        {/* RATING BADGE */}
+
         <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
           <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
           <span className="font-bold text-gray-900">
@@ -194,7 +194,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
           </span>
         </div>
 
-        {/* SAVE BUTTON */}
+
         <button
           onClick={handleSave}
           disabled={isLoading}
@@ -207,7 +207,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
           />
         </button>
 
-        {/* RANKING BADGE */}
+
         {college.ranking && (
           <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
             <Award className="w-3 h-3 text-yellow-400" />
@@ -217,7 +217,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
           </div>
         )}
 
-        {/* COMPARE BADGE (when added) */}
+
         {showCompareButton && isCompared && (
           <div className="absolute bottom-4 right-4 bg-orange-600 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-lg animate-pulse">
             <CheckCircle className="w-3 h-3 text-white" />
@@ -228,7 +228,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
         )}
       </div>
 
-      {/* CONTENT SECTION */}
+
       <div className="p-5">
         {/* TITLE */}
         <h3 className="text-[15px] font-bold text-gray-900 leading-tight line-clamp-2">
@@ -254,9 +254,9 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
           )}
         </div>
 
-        {/* STATS - FIRST ROW */}
+
         <div className="grid grid-cols-3 gap-4 mt-6">
-          {/* FEES */}
+
           <div className="text-center">
             <div className="flex items-center justify-center text-emerald-600">
               <IndianRupee className="w-5 h-5" />
@@ -268,7 +268,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
             <p className="text-xs text-gray-500 mt-1">(Lakhs) Fees/Year</p>
           </div>
 
-          {/* PLACEMENTS */}
+
           <div className="text-center">
             <div className="flex items-center justify-center text-orange-600">
               <TrendingUp className="w-5 h-5" />
@@ -279,7 +279,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
             <p className="text-xs text-gray-500 mt-1">Placement</p>
           </div>
 
-          {/* CAMPUS AREA */}
+
           <div className="text-center">
             <div className="flex items-center justify-center text-amber-600">
               <LandPlot className="w-5 h-5" />
@@ -291,7 +291,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
           </div>
         </div>
 
-        {/* STATS - SECOND ROW */}
+
         {(college.averagePackage || college.highestPackage) && (
           <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
             {college.averagePackage && (
@@ -314,7 +314,7 @@ const CollegeCard = ({ college, isSaved = false, onSave }) => {
           </div>
         )}
 
-        {/* ACTION BUTTONS */}
+
         <div className="mt-6 pt-4 border-t border-gray-100 flex gap-3">
           <button
             onClick={() => navigate(`/colleges/${college.slug}`)}

@@ -29,7 +29,7 @@ const ComparePage = () => {
   const idsParam = searchParams.get("ids");
   const urlIds = idsParam ? idsParam.split(",").map((id) => parseInt(id)) : [];
 
-  // Use compareIds from context as source of truth
+  // Use compareIds
   const activeIds = compareIds.length > 0 ? compareIds : urlIds;
 
   const fetchColleges = useCallback(async () => {
@@ -95,7 +95,7 @@ const ComparePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+
       <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <button

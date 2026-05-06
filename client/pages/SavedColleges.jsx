@@ -135,7 +135,7 @@ const SavedCollege = () => {
             </p>
           </div>
 
-          {/* EMPTY STATE */}
+
           <div className="bg-white rounded-3xl p-12 sm:p-16 text-center shadow-sm border border-gray-100">
             <div className="text-7xl sm:text-8xl mb-6">
               📚
@@ -177,7 +177,7 @@ const SavedCollege = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Refresh Button */}
+
             <button
               onClick={() => fetchSavedColleges(true)}
               disabled={isRefreshing}
@@ -195,7 +195,7 @@ const SavedCollege = () => {
               )}
             </button>
 
-            {/* Count Badge */}
+
             <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200">
               <p className="text-sm font-semibold text-gray-700">
                 {colleges.length} {colleges.length === 1 ? 'College' : 'Colleges'} Saved
@@ -204,7 +204,7 @@ const SavedCollege = () => {
           </div>
         </div>
 
-        {/* COLLEGES GRID */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {colleges.map((item) => (
             <CollegeCard

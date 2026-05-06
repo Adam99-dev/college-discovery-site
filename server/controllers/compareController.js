@@ -1,5 +1,6 @@
 import prisma from "../config/db.js";
 
+// compare 3 colleges at max
 export const compareColleges = async (req, res) => {
   try {
     const { ids } = req.query;
@@ -63,7 +64,7 @@ export const compareColleges = async (req, res) => {
       },
     });
 
-    // 🔥 preserve order
+
     const orderedColleges = collegeIds.map((id) =>
       colleges.find((c) => c.id === id)
     );

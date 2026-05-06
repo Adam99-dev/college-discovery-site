@@ -1,8 +1,5 @@
 import {
-  Star, MapPin, IndianRupee, TrendingUp, LandPlot, Calendar,
-  Users, UserRound, FileText, X, BarChart3, Briefcase, Trophy,
-  CheckCircle2, Crown, Flame, ArrowLeft, Building2, BookOpen,
-  Sparkles, ChartNoAxesCombined, Eraser, Share, BadgePlus,
+  Sparkles, ChartNoAxesCombined, ArrowLeft
 } from "lucide-react";
 
 // --- Skeleton Components ---
@@ -115,9 +112,8 @@ const OverallWinnerSkeleton = () => (
   </div>
 );
 
-// --- Main Skeleton Loader ---
+
 const ComparePageSkeleton = () => {
-  // Simulate 2 college cards (could be 3, but we'll show 2 as typical)
   const skeletonCount = 3;
 
   return (
@@ -142,7 +138,7 @@ const ComparePageSkeleton = () => {
         </div>
       </div>
 
-      {/* SELECTED CARDS Skeleton */}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div className={`grid gap-4 grid-cols-1 ${skeletonCount >= 2 ? "sm:grid-cols-2" : ""} ${skeletonCount >= 3 ? "lg:grid-cols-3" : ""}`}>
           {Array.from({ length: skeletonCount }).map((_, idx) => (
@@ -155,7 +151,7 @@ const ComparePageSkeleton = () => {
           ))}
         </div>
 
-        {/* Comparison Table Skeleton */}
+
         <div className="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-lg">
           <div className="overflow-x-auto">
             <div className="min-w-[640px]">
@@ -167,7 +163,6 @@ const ComparePageSkeleton = () => {
           </div>
         </div>
 
-        {/* VERDICT Skeleton */}
         <div className="rounded-xl border border-gray-200 p-4 sm:p-6 bg-gray-50 shadow-lg">
           <div className="flex items-center gap-2 mb-4">
             <div className="p-1.5 rounded-lg bg-gray-200 animate-pulse">

@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           
-          {/* Logo & Description */}
+
           <div className="md:col-span-5">
             <Link to="/" className="flex items-center gap-3 mb-6">
               <div className="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-gray-700">
@@ -31,7 +31,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Quick Links */}
+
           <div className="md:col-span-2">
             <h4 className="text-sm font-semibold text-gray-300 mb-4">PLATFORM</h4>
             <ul className="space-y-3 text-sm text-gray-400">
@@ -52,7 +52,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Legal & Newsletter */}
+
           <div className="md:col-span-3">
             <h4 className="text-sm font-semibold text-gray-300 mb-4">LEGAL</h4>
             <ul className="space-y-3 text-sm text-gray-400 mb-8">
@@ -60,7 +60,7 @@ export default function Footer() {
               <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
             </ul>
 
-            {/* Minimal Newsletter */}
+
             <div>
               <p className="text-xs text-gray-400 mb-2">Stay updated</p>
               <div className="flex">
@@ -77,7 +77,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+
         <div className="border-t border-zinc-800 mt-14 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
           <p>© 2026 CollegeDekho. All Rights Reserved.</p>
           <p className="mt-4 md:mt-0">Made with ❤️ for students in India</p>

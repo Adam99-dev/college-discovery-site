@@ -5,29 +5,21 @@ const HeroPrediction = () => {
     <div className="relative bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-12 sm:pt-16 sm:pb-16 lg:pt-24 lg:pb-20">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
-          {/* Left Side - Illustration */}
+
           <div className="relative flex justify-center lg:justify-start order-2 lg:order-1">
             <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-lg">
-              {/* Main Illustration */}
+
               <div className="relative">
                 <img
                   src="/hero.avif"
                   alt="College prediction illustration"
                   className="w-full h-auto drop-shadow-2xl hidden lg:block"
                 />
-
-                {/* Decorative elements */}
-                <div className="absolute -top-6 -left-6 text-4xl sm:text-5xl lg:text-6xl opacity-20 hidden sm:block">
-                  ☁️
-                </div>
-                <div className="absolute -bottom-8 -right-8 text-4xl sm:text-5xl lg:text-5xl opacity-20 hidden sm:block">
-                  🌟
-                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Side - Content */}
+
           <div className="space-y-8 sm:space-y-10 order-1 lg:order-2">
             <div className="text-center lg:text-left">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
@@ -41,7 +33,7 @@ const HeroPrediction = () => {
                 using years of historical data and advanced analytics.
               </p>
             </div>
-            {/* Rank Predictors */}
+
             <div>
               <div className="flex items-center gap-3 mb-4 sm:mb-5">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-100 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl">
@@ -68,7 +60,6 @@ const HeroPrediction = () => {
               </div>
             </div>
 
-            {/* CTA Button */}
             <div className="pt-2 sm:pt-4">
               <div className="relative inline-block w-full sm:w-auto">
                 <button
@@ -79,7 +70,7 @@ const HeroPrediction = () => {
                   <span className="text-xl sm:text-2xl">→</span>
                 </button>
 
-                {/* Animated Diagonal Coming Soon Ribbon */}
+
                 <div className="absolute -top-1 overflow-hidden w-full h-32 pointer-events-none">
                   <div className="absolute bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] sm:text-[11px] font-bold py-1.5  top-[20px] w-full text-center shadow-lg animate-pulse">
                     <span className="tracking-wider">✦ COMING SOON ✦</span>

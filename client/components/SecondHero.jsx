@@ -6,7 +6,7 @@ export default function CollegeDataPlatform() {
   return (
     <div className="min-h-screen bg-[#f8fafc] py-10 px-4 md:px-6 font-sans">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
             Compare Colleges Amongst India
@@ -25,9 +25,9 @@ export default function CollegeDataPlatform() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-          {/* Left Side - Content */}
+
           <div className="lg:col-span-5 space-y-10">
-            {/* Rankings Section */}
+
             <div className="bg-transparent rounded-3xl border border-gray-100 p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-9 h-9 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl">
@@ -66,7 +66,7 @@ export default function CollegeDataPlatform() {
             </div>
           </div>
 
-          {/* Right Side - Illustration Area */}
+
           <div className="hidden lg:block lg:col-span-7 flex items-center justify-center relative min-h-[620px]">
             <div className="relative w-full max-w-[560px]">
               {/* Main Illustration Container */}

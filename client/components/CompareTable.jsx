@@ -28,7 +28,7 @@ import {
 
 
 const CompareTable = ({ colleges }) => {
-  // Calculate best values for each metric
+  // Calculate best values for each feature
   const bestRating = getBestRating(colleges);
   const bestRatingCollege = getBestRatingCollege(colleges);
   const minFees = getMinFees(colleges);
@@ -349,7 +349,7 @@ const CompareTable = ({ colleges }) => {
         >
           <thead>
             <tr>
-              {/* Sticky feature column header */}
+
               <th
                 className="sticky left-0 z-20 bg-gray-50 border-b border-r border-gray-200 px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
                 style={{ minWidth: "148px", width: "148px" }}
@@ -377,12 +377,12 @@ const CompareTable = ({ colleges }) => {
                     )}
                     {abbr ? (
                       <div className="flex flex-col items-center gap-1">
-                        {/* Mobile → only abbreviation */}
+
                         <span className="block sm:hidden text-[15px] font-extrabold text-gray-900 tracking-tight leading-none">
                           {abbr}
                         </span>
 
-                        {/* Desktop → full name */}
+
                         <span className="hidden sm:block text-[12px] md:text-lg font-bold text-gray-800 leading-snug text-center line-clamp-2">
                           {fullName}
                           {isOverallBest && (
@@ -412,7 +412,7 @@ const CompareTable = ({ colleges }) => {
                   rowIdx === rows.length - 1 ? "border-b-0" : ""
                 }`}
               >
-                {/* Sticky feature label */}
+
                 <td
                   className="sticky left-0 z-10 bg-gray-50 border-r border-gray-200 px-4 py-3"
                   style={{ minWidth: "148px", width: "148px" }}
@@ -427,7 +427,7 @@ const CompareTable = ({ colleges }) => {
                   </div>
                 </td>
 
-                {/* College data cells */}
+
                 {colleges.map((c, idx) => {
                   const scheme = getColorScheme(idx);
                   return (

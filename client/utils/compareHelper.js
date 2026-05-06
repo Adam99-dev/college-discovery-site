@@ -1,10 +1,4 @@
-// utils/compareUtils.js
-
-/**
- * Determines the college with the best rating
- * @param {Array} colleges - Array of college objects
- * @returns {Object|null} - Best rated college object or null
- */
+/* Determines the college with the best rating */
 export const getBestRatingCollege = (colleges) => {
   if (!colleges?.length) return null;
   return colleges.reduce((best, current) => {
@@ -14,21 +8,13 @@ export const getBestRatingCollege = (colleges) => {
   }, null);
 };
 
-/**
- * Gets the highest rating value
- * @param {Array} colleges - Array of college objects
- * @returns {number|null} - Highest rating or null
- */
+/* Gets the highest rating value */
 export const getBestRating = (colleges) => {
   if (!colleges?.length) return null;
   return Math.max(...colleges.map(c => c.rating || 0));
 };
 
-/**
- * Determines the college with minimum fees
- * @param {Array} colleges - Array of college objects
- * @returns {Object|null} - College with minimum fees or null
- */
+/* Determines the college with minimum fees */
 export const getMinFeesCollege = (colleges) => {
   if (!colleges?.length) return null;
   return colleges.reduce((min, current) => {
@@ -38,22 +24,14 @@ export const getMinFeesCollege = (colleges) => {
   }, null);
 };
 
-/**
- * Gets the minimum fees value
- * @param {Array} colleges - Array of college objects
- * @returns {number|null} - Minimum fees or null
- */
+/* Gets the minimum fees value */
 export const getMinFees = (colleges) => {
   if (!colleges?.length) return null;
   const minFees = Math.min(...colleges.map(c => c.feesMin || Infinity));
   return minFees === Infinity ? null : minFees;
 };
 
-/**
- * Determines the college with highest placement rate
- * @param {Array} colleges - Array of college objects
- * @returns {Object|null} - College with highest placement rate or null
- */
+/* Determines the college with highest placement rate */
 export const getHighestPlacementCollege = (colleges) => {
   if (!colleges?.length) return null;
   return colleges.reduce((best, current) => {
@@ -63,21 +41,13 @@ export const getHighestPlacementCollege = (colleges) => {
   }, null);
 };
 
-/**
- * Gets the highest placement rate value
- * @param {Array} colleges - Array of college objects
- * @returns {number|null} - Highest placement rate or null
- */
+/* Gets the highest placement rate value */
 export const getHighestPlacementRate = (colleges) => {
   if (!colleges?.length) return null;
   return Math.max(...colleges.map(c => c.placementPercentage || 0));
 };
 
-/**
- * Determines the college with highest average package
- * @param {Array} colleges - Array of college objects
- * @returns {Object|null} - College with highest average package or null
- */
+/* Determines the college with highest average package */
 export const getHighestAvgPackageCollege = (colleges) => {
   if (!colleges?.length) return null;
   return colleges.reduce((best, current) => {
@@ -87,21 +57,13 @@ export const getHighestAvgPackageCollege = (colleges) => {
   }, null);
 };
 
-/**
- * Gets the highest average package value
- * @param {Array} colleges - Array of college objects
- * @returns {number|null} - Highest average package or null
- */
+/* Gets the highest average package value */
 export const getHighestAvgPackage = (colleges) => {
   if (!colleges?.length) return null;
   return Math.max(...colleges.map(c => c.averagePackage || 0));
 };
 
-/**
- * Determines the college with highest package
- * @param {Array} colleges - Array of college objects
- * @returns {Object|null} - College with highest package or null
- */
+/* Determines the college with highest package */
 export const getHighestPackageCollege = (colleges) => {
   if (!colleges?.length) return null;
   return colleges.reduce((best, current) => {
@@ -111,21 +73,13 @@ export const getHighestPackageCollege = (colleges) => {
   }, null);
 };
 
-/**
- * Gets the highest package value
- * @param {Array} colleges - Array of college objects
- * @returns {number|null} - Highest package or null
- */
+/* Gets the highest package value  */
 export const getHighestPackage = (colleges) => {
   if (!colleges?.length) return null;
   return Math.max(...colleges.map(c => c.highestPackage || 0));
 };
 
-/**
- * Determines the college with largest campus area
- * @param {Array} colleges - Array of college objects
- * @returns {Object|null} - College with largest campus area or null
- */
+/* Determines the college with largest campus area */
 export const getLargestCampusCollege = (colleges) => {
   if (!colleges?.length) return null;
   return colleges.reduce((largest, current) => {
@@ -135,21 +89,13 @@ export const getLargestCampusCollege = (colleges) => {
   }, null);
 };
 
-/**
- * Gets the largest campus area value
- * @param {Array} colleges - Array of college objects
- * @returns {number|null} - Largest campus area or null
- */
+/* Gets the largest campus area value */
 export const getLargestCampusArea = (colleges) => {
   if (!colleges?.length) return null;
   return Math.max(...colleges.map(c => c.campusArea || 0));
 };
 
-/**
- * Determines the college with highest total students
- * @param {Array} colleges - Array of college objects
- * @returns {Object|null} - College with highest total students or null
- */
+/* Determines the college with highest total students */
 export const getHighestTotalStudentsCollege = (colleges) => {
   if (!colleges?.length) return null;
   return colleges.reduce((highest, current) => {
@@ -159,24 +105,13 @@ export const getHighestTotalStudentsCollege = (colleges) => {
   }, null);
 };
 
-/**
- * Gets the highest total students value
- * @param {Array} colleges - Array of college objects
- * @returns {number|null} - Highest total students or null
- */
+/* Gets the highest total students value */
 export const getHighestTotalStudents = (colleges) => {
   if (!colleges?.length) return null;
   return Math.max(...colleges.map(c => c.totalStudents || 0));
 };
 
-/**
- * Checks if a college is the best in a specific category
- * @param {Object} college - College object
- * @param {Array} colleges - All colleges array
- * @param {string} metric - Metric to compare ('rating', 'feesMin', 'placementPercentage', etc.)
- * @param {boolean} isHighest - True for highest wins, false for lowest wins
- * @returns {boolean} - True if college is the best in that metric
- */
+/* Checks if a college is the best in a specific category */
 export const isBestInMetric = (college, colleges, metric, isHighest = true) => {
   if (!college || !colleges?.length) return false;
   
@@ -189,11 +124,7 @@ export const isBestInMetric = (college, colleges, metric, isHighest = true) => {
   }
 };
 
-/**
- * Gets all best colleges information
- * @param {Array} colleges - Array of college objects
- * @returns {Object} - Object containing all best colleges and their values
- */
+/* Gets all best colleges information */
 export const getAllBestMetrics = (colleges) => {
   if (!colleges?.length) return null;
   

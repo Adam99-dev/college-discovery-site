@@ -36,9 +36,8 @@ const SearchBar = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Fetch suggestions with debug logs
+  // Fetch suggestions
   const fetchSuggestions = useCallback(async (searchTerm) => {
-    console.log("🔍 Fetching suggestions for:", searchTerm); // DEBUG
 
     if (!searchTerm?.trim() || searchTerm.length < 2) {
       setSuggestions([]);
@@ -57,33 +56,33 @@ const SearchBar = ({
 
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/api/colleges?search=${encodeURIComponent(searchTerm)}`;
-      console.log("📡 Calling URL:", url); // DEBUG
+      
 
       const response = await fetch(url, {
         credentials: "include",
         signal: controller.signal,
       });
 
-      console.log("📥 Response status:", response.status); // DEBUG
+      
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const data = await response.json();
-      console.log("📦 API Response:", data); // DEBUG
+      console.log("API Response:", data); // DEBUG
 
       if (data.success) {
         const results = data.colleges || [];
-        console.log(`✅ Found ${results.length} suggestions`); // DEBUG
+        
         setSuggestions(results);
         setIsOpen(results.length > 0);
       } else {
-        console.warn("❌ API returned success: false");
+        
         setSuggestions([]);
         setIsOpen(false);
       }
     } catch (error) {
       if (error.name !== "AbortError") {
-        console.error("🚨 Search error:", error);
+        
         setSuggestions([]);
         setIsOpen(false);
       }
@@ -162,7 +161,7 @@ const SearchBar = ({
         )}
       </form>
 
-      {/* Suggestions Dropdown */}
+
       {isOpen && (
         <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] overflow-hidden max-h-[320px] overflow-y-auto">
           {isLoading ? (

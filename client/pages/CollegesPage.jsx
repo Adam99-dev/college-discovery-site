@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import CollegeCard from "../components/CollegeCard.jsx";
-import SearchBar from "../components/SearchBar.jsx";
 import CollegePageSkeleton from "../skeletons/CollegePage.s.jsx";
-import { School, Frown, RotateCcw } from "lucide-react";
+import { School, RotateCcw } from "lucide-react";
 import CompareBar from "../components/CompareBar.jsx";
 
 const CollegesPage = () => {
@@ -29,7 +28,7 @@ const CollegesPage = () => {
   const [maxFees, setMaxFees] = useState("");
   const [minRating, setMinRating] = useState("");
 
-  // APPLIED FILTERS (used for actual fetching)
+  // APPLIED FILTERS
   const [appliedSearch, setAppliedSearch] = useState("");
   const [appliedLocation, setAppliedLocation] = useState("");
   const [appliedMinFees, setAppliedMinFees] = useState("");
@@ -90,7 +89,6 @@ const CollegesPage = () => {
         setTotalColleges(data.totalColleges || 0);
         setTotalPages(data.totalPages || 1);
       } catch (err) {
-        console.error(err);
         setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
@@ -165,7 +163,7 @@ const CollegesPage = () => {
           <p className="text-gray-600 font-medium">{totalColleges} colleges found</p>
         </div>
 
-        {/* FILTERS */}
+
         <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl shadow-md mb-8 border border-orange-100">
           <div className="p-5">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-orange-200">
@@ -186,7 +184,7 @@ const CollegesPage = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-              {/* Location */}
+
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,7 +201,7 @@ const CollegesPage = () => {
                 />
               </div>
 
-              {/* Min Fees */}
+
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">₹</div>
                 <input
@@ -215,7 +213,7 @@ const CollegesPage = () => {
                 />
               </div>
 
-              {/* Max Fees */}
+
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">₹</div>
                 <input
@@ -227,7 +225,7 @@ const CollegesPage = () => {
                 />
               </div>
 
-              {/* Rating */}
+
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                   <span className="text-lg">★</span>
@@ -246,7 +244,6 @@ const CollegesPage = () => {
                 </select>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex gap-3">
                 <button
                   onClick={handleApplyFilters}
@@ -266,7 +263,7 @@ const CollegesPage = () => {
           </div>
         </div>
 
-        {/* COLLEGES GRID */}
+
         {colleges.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -282,7 +279,7 @@ const CollegesPage = () => {
 
             <CompareBar />
 
-            {/* Pagination */}
+
             <div className="flex justify-center items-center gap-4 mt-12">
               <button
                 disabled={page === 1}

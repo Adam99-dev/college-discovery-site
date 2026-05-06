@@ -1,9 +1,11 @@
 // CollegeListPopup.jsx
 import React, { useState, useEffect } from "react";
 import { useCompare } from "../context/CompareContext.jsx";
+import CollegeListPopupSkeleton from "../skeletons/CollegeListPopup.s.jsx";
 
 const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
-  const { toggleCompare, isInCompare, compareIds, MAX_COMPARE_ITEMS } = useCompare();
+  const { toggleCompare, isInCompare, compareIds, MAX_COMPARE_ITEMS } =
+    useCompare();
   const [colleges, setColleges] = useState([]);
   const [allColleges, setAllColleges] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
       setLoading(true);
       setError(null);
       const response = await fetch(
-        import.meta.env.VITE_BACKEND_URL + `/api/colleges?page=1&limit=20`
+        import.meta.env.VITE_BACKEND_URL + `/api/colleges?page=1&limit=20`,
       );
 
       if (!response.ok) {
@@ -49,7 +51,7 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
     }
   };
 
-  // Search colleges - only called when search button is clicked
+  // Search colleges
   const searchColleges = async () => {
     const query = searchInput.trim();
     setSearchQuery(query);
@@ -63,7 +65,7 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
       setLoading(true);
       const response = await fetch(
         import.meta.env.VITE_BACKEND_URL +
-          `/api/colleges?search=${encodeURIComponent(query)}&limit=20`
+          `/api/colleges?search=${encodeURIComponent(query)}&limit=20`,
       );
 
       if (!response.ok) {
@@ -94,7 +96,7 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
 
   // Handle Enter key press
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       searchColleges();
     }
   };
@@ -106,29 +108,31 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
     setColleges(allColleges);
   };
 
-  // Handle add/toggle college with loading state
+  // Handle add/toggle 
   const handleToggleCollege = async (college) => {
     const isSelected = isInCompare(college.id);
-    
+
     if (isSelected) {
       setRemovingCollegeId(college.id);
     } else {
       if (compareIds.length >= MAX_COMPARE_ITEMS) {
-        alert(`You can only compare up to ${MAX_COMPARE_ITEMS} colleges at a time.`);
+        alert(
+          `You can only compare up to ${MAX_COMPARE_ITEMS} colleges at a time.`,
+        );
         return;
       }
       setAddingCollegeId(college.id);
     }
-    
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
     try {
       toggleCompare(college);
-      
+
       if (!isSelected && onAddCollege) {
         onAddCollege(college);
       }
-      
+
       if (!isSelected && compareIds.length + 1 >= MAX_COMPARE_ITEMS) {
         setTimeout(() => {
           onClose();
@@ -143,23 +147,7 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
     }
   };
 
-  // Skeleton Loader Component
-  const SkeletonLoader = () => (
-    <div className="space-y-3">
-      {[1, 2, 3, 4, 5].map((item) => (
-        <div key={item} className="p-4 border border-gray-100 rounded-2xl animate-pulse">
-          <div className="flex justify-between items-start">
-            <div className="flex-1">
-              <div className="h-6 bg-gray-200 rounded-lg w-3/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded-lg w-1/2 mb-1"></div>
-              <div className="h-3 bg-gray-200 rounded-lg w-1/3"></div>
-            </div>
-            <div className="w-[120px] h-10 bg-gray-200 rounded-xl"></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+
 
   useEffect(() => {
     if (isOpen) {
@@ -177,36 +165,44 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop with soft blur */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal */}
       <div className="relative min-h-screen flex items-center justify-center p-4">
         <div className="relative bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
-          {/* Header */}
           <div className="flex justify-between items-center p-5 border-b border-gray-100">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">Select Colleges to Compare</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Select Colleges to Compare
+              </h2>
               <p className="text-sm text-gray-400 mt-1">
-                {compareIds.length >= MAX_COMPARE_ITEMS 
-                  ? "Maximum colleges selected" 
-                  : `${MAX_COMPARE_ITEMS - compareIds.length} slot${MAX_COMPARE_ITEMS - compareIds.length !== 1 ? 's' : ''} remaining`}
+                {compareIds.length >= MAX_COMPARE_ITEMS
+                  ? "Maximum colleges selected"
+                  : `${MAX_COMPARE_ITEMS - compareIds.length} slot${MAX_COMPARE_ITEMS - compareIds.length !== 1 ? "s" : ""} remaining`}
               </p>
             </div>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-50 rounded-full"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
 
-          {/* Search Bar with Search Button */}
           <div className="p-5 border-b border-gray-100">
             <div className="flex gap-3">
               <input
@@ -223,8 +219,18 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
                 disabled={loading}
                 className="px-6 py-3 bg-orange-500 text-white rounded-2xl hover:bg-orange-600 transition-all font-medium shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
                 Search
               </button>
@@ -244,10 +250,12 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
             )}
           </div>
 
-          {/* Results count */}
           <div className="px-5 py-3 text-sm bg-gray-50/30 border-b border-gray-100">
             {!loading && colleges.length > 0 && (
-              <span className="text-gray-500">Showing {colleges.length} college{colleges.length !== 1 ? 's' : ''}</span>
+              <span className="text-gray-500">
+                Showing {colleges.length} college
+                {colleges.length !== 1 ? "s" : ""}
+              </span>
             )}
             {compareIds.length > 0 && (
               <span className="ml-4 text-orange-600 font-medium">
@@ -256,10 +264,9 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
             )}
           </div>
 
-          {/* Colleges List */}
           <div className="flex-1 overflow-y-auto p-5">
             {loading ? (
-              <SkeletonLoader />
+              <CollegeListPopupSkeleton />
             ) : error ? (
               <div className="text-center py-12">
                 <div className="text-red-400 mb-3 text-sm">Error: {error}</div>
@@ -272,34 +279,43 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
               </div>
             ) : colleges.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-gray-400 text-sm">No colleges found matching your search.</div>
+                <div className="text-gray-400 text-sm">
+                  No colleges found matching your search.
+                </div>
               </div>
             ) : (
               <div className="space-y-3">
                 {colleges.map((college) => {
                   const isSelected = isInCompare(college.id);
-                  const isMaxReached = compareIds.length >= MAX_COMPARE_ITEMS && !isSelected;
+                  const isMaxReached =
+                    compareIds.length >= MAX_COMPARE_ITEMS && !isSelected;
                   const isAdding = addingCollegeId === college.id;
                   const isRemoving = removingCollegeId === college.id;
                   const isProcessing = isAdding || isRemoving;
-                  
+
                   return (
                     <div
                       key={college.id}
                       className={`p-4 rounded-2xl transition-all duration-200 ${
-                        isSelected 
-                          ? 'bg-orange-50/80 border-2 border-orange-200' 
-                          : 'bg-white border border-gray-100 hover:border-orange-200 hover:shadow-md'
-                      } ${isProcessing ? 'opacity-60' : ''}`}
+                        isSelected
+                          ? "bg-orange-50/80 border-2 border-orange-200"
+                          : "bg-white border border-gray-100 hover:border-orange-200 hover:shadow-md"
+                      } ${isProcessing ? "opacity-60" : ""}`}
                     >
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 text-lg mb-1">{college.name}</h3>
+                          <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                            {college.name}
+                          </h3>
                           {college.location && (
-                            <p className="text-gray-500 text-sm mb-1">{college.location}</p>
+                            <p className="text-gray-500 text-sm mb-1">
+                              {college.location}
+                            </p>
                           )}
                           {college.type && (
-                            <p className="text-gray-400 text-xs">{college.type}</p>
+                            <p className="text-gray-400 text-xs">
+                              {college.type}
+                            </p>
                           )}
                         </div>
                         <button
@@ -307,35 +323,68 @@ const CollegeListPopup = ({ isOpen, onClose, onAddCollege }) => {
                           disabled={isMaxReached || isProcessing}
                           className={`
                             px-5 py-2.5 rounded-xl font-medium transition-all min-w-[130px] flex items-center justify-center gap-2 shadow-sm
-                            ${isSelected 
-                              ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' 
-                              : isMaxReached
-                                ? 'bg-gray-100 cursor-not-allowed text-gray-400'
-                                : 'bg-orange-500 hover:bg-orange-600 text-white shadow-orange-500/20'
+                            ${
+                              isSelected
+                                ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                : isMaxReached
+                                  ? "bg-gray-100 cursor-not-allowed text-gray-400"
+                                  : "bg-orange-500 hover:bg-orange-600 text-white shadow-orange-500/20"
                             }
-                            ${isProcessing ? 'cursor-wait' : ''}
+                            ${isProcessing ? "cursor-wait" : ""}
                           `}
                         >
                           {isAdding ? (
                             <>
-                              <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              <svg
+                                className="animate-spin h-4 w-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
                               </svg>
                               <span>Adding...</span>
                             </>
                           ) : isRemoving ? (
                             <>
-                              <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              <svg
+                                className="animate-spin h-4 w-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
                               </svg>
                               <span>Removing...</span>
                             </>
                           ) : isSelected ? (
-                            'Remove'
+                            "Remove"
                           ) : (
-                            'Add to Compare'
+                            "Add to Compare"
                           )}
                         </button>
                       </div>

@@ -17,6 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+// cors config 
 app.use(
   cors({
     origin: [
@@ -29,15 +30,15 @@ app.use(
 
 // ================= ROUTES =================
 
-// 🔓 PUBLIC ROUTES
+// PUBLIC ROUTES
 app.use("/api/user", authRoutes); // login, signup
 app.use("/api/colleges", collegeRoutes); // listing, details
 app.use("/api/compare", compareRoutes); // compare colleges
 
-// 🔐 PROTECTED ROUTES
+// PROTECTED ROUTES
 app.use("/api/saved_colleges", authMiddleware, savedCollegeRoutes);
 
-// ================= SERVER =================
+// server listens
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

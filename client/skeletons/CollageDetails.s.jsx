@@ -3,7 +3,7 @@ import React from "react";
 const CollegeDetailsSkeleton = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 animate-pulse">
-      {/* TOP BAR - Skeleton */}
+
       <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -20,12 +20,12 @@ const CollegeDetailsSkeleton = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* HERO SECTION - Skeleton */}
+
         <div className="grid lg:grid-cols-5 gap-6 mb-12">
-          {/* MAIN IMAGE */}
+
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video bg-gray-200">
-              {/* Gradient Overlay Skeleton */}
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-8">
                 <div className="flex items-center gap-2 mb-3">
@@ -41,7 +41,7 @@ const CollegeDetailsSkeleton = () => {
             </div>
           </div>
 
-          {/* GALLERY THUMBNAILS */}
+
           <div className="lg:col-span-2 grid grid-cols-2 gap-4">
             {[...Array(4)].map((_, index) => (
               <div
@@ -52,7 +52,7 @@ const CollegeDetailsSkeleton = () => {
           </div>
         </div>
 
-        {/* TABS NAVIGATION - Skeleton */}
+
         <div className="border-b border-gray-200 mb-8">
           <div className="flex gap-8 overflow-x-auto">
             {["overview", "courses", "placements", "admissions", "reviews"].map((tab) => (
@@ -63,11 +63,11 @@ const CollegeDetailsSkeleton = () => {
           </div>
         </div>
 
-        {/* MAIN CONTENT - Skeleton */}
+
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* LEFT SIDE */}
+
           <div className="lg:col-span-2 space-y-8">
-            {/* KEY STATS */}
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[...Array(4)].map((_, index) => (
                 <div key={index} className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
@@ -84,7 +84,7 @@ const CollegeDetailsSkeleton = () => {
               ))}
             </div>
 
-            {/* DESCRIPTION */}
+
             <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-6 h-6 bg-gray-200 rounded"></div>
@@ -99,7 +99,7 @@ const CollegeDetailsSkeleton = () => {
               </div>
             </div>
 
-            {/* INFRASTRUCTURE */}
+
             <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
               <div className="w-56 h-7 bg-gray-200 rounded mb-6"></div>
               <div className="grid md:grid-cols-2 gap-6">
@@ -129,9 +129,9 @@ const CollegeDetailsSkeleton = () => {
             </div>
           </div>
 
-          {/* RIGHT SIDEBAR */}
+
           <div className="space-y-6">
-            {/* QUICK ACTION CARD */}
+
             <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
               <div className="text-center mb-6">
                 <div className="w-20 h-4 bg-gray-200 rounded mx-auto mb-2"></div>
@@ -153,7 +153,7 @@ const CollegeDetailsSkeleton = () => {
               </div>
             </div>
 
-            {/* SIMILAR COLLEGES CARD */}
+
             <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
               <div className="w-32 h-5 bg-gray-200 rounded mb-3"></div>
               <div className="space-y-3">
@@ -168,7 +168,7 @@ const CollegeDetailsSkeleton = () => {
           </div>
         </div>
 
-        {/* RECOMMENDED COLLEGES SECTION */}
+
         <div className="mt-20">
           <div className="flex items-center justify-between mb-8">
             <div className="w-56 h-8 bg-gray-200 rounded"></div>

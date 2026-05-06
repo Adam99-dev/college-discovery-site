@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Eye, EyeOff, X } from "lucide-react"; // Added X import
+import { Eye, EyeOff, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
@@ -47,7 +47,7 @@ const Login = () => {
 
       toast.success(data.message);
 
-      loginUser(data.user); // 🔥 FIX
+      loginUser(data.user);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -60,7 +60,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50 flex items-center justify-center p-4">
       <div className="max-w-5xl w-full bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row relative">
-        {/* Close Button - Top Right */}
+
         <button
           onClick={() => navigate("/")}
           className="absolute top-2 right-0 z-10 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
@@ -69,7 +69,7 @@ const Login = () => {
           <X size={18} />
         </button>
 
-        {/* Left Side */}
+
         <div className="hidden lg:flex lg:w-1/3 bg-orange-500 p-8 flex-col justify-between text-white">
           <div>
             <h2 className="text-2xl font-bold mb-2">Welcome Back!</h2>
@@ -88,7 +88,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right Side */}
+
         <div className="lg:w-2/3 p-6 md:p-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <div className="flex border-b border-gray-200">
@@ -114,7 +114,7 @@ const Login = () => {
             </button>
           </div>
 
-          {/* Email */}
+
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
@@ -129,7 +129,7 @@ const Login = () => {
             />
           </div>
 
-          {/* Password */}
+
           <div className="relative mb-5">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
@@ -167,7 +167,6 @@ const Login = () => {
             </a>
           </div>
 
-          {/* Login Button */}
           <button
             onClick={handleLogin}
             disabled={loading}
