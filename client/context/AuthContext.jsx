@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
         import.meta.env.VITE_BACKEND_URL + "/api/user/me",
         {
           credentials: "include",
-        }
+        },
       );
 
       if (!res.ok) throw new Error();
@@ -33,28 +33,28 @@ export const AuthProvider = ({ children }) => {
 
   // 🔥 FIX 1: instant UI update
   const loginUser = (userData) => {
-    setUser(userData);        // immediate update
+    setUser(userData); // immediate update
   };
 
   // 🔥 FIX 2: optional re-sync (background)
   const loginAndSync = async (userData) => {
-    setUser(userData);        // instant UI
-    await checkAuth();        // sync with backend (optional)
+    setUser(userData); // instant UI
+    await checkAuth(); // sync with backend (optional)
   };
 
   const logoutUser = async () => {
     try {
-      await fetch(
-        import.meta.env.VITE_BACKEND_URL + "/api/user/logout",
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
+      await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/logout", {
+        method: "POST",
+        credentials: "include",
+      });
     } catch (e) {
       console.error(e);
     } finally {
+
       setUser(null);
+
+      window.location.href = "/";
     }
   };
 
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         isAuthenticated: !!user,
         loginUser,
-        loginAndSync,   // 🔥 new
+        loginAndSync, // 🔥 new
         logoutUser,
         refreshAuth: checkAuth,
       }}
